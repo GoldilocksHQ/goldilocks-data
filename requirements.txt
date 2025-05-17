@@ -1,0 +1,5 @@
+    google-generativeai
+    httpx
+    pydantic
+    python-dotenv
+    openai

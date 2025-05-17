@@ -1,0 +1,100 @@
+{
+  "company_data": {
+    "company_number_of_contacts": null,
+    "company_logo_url": null,
+    "company_type": "Corporation - C corp",
+    "company_number_of_profiles": null,
+    "company_id": "comp-irwe-32b4ddbcf02716609984039df5f2c106",
+    "company_revenue_in_usd_code": "Less than 1M",
+    "company_last_seen_date": "2024-10-15 00:00:00",
+    "company_alternative_names": {
+        "alias_names": [
+            "GREENFIELDS (SPORTS SURFACES)",
+            "Greenfields"
+        ],
+        "previous_names": [],
+        "trade_names": []
+    },
+    "company_number_of_offices": 1,
+    "company_phones": [
+        {
+            "phone": "+44 1204 699930",
+            "priority": null
+        }
+    ],
+    "company_web_address_aliases": [
+        "http://www.greenfieldsturf.co.uk/"
+    ],
+    "company_financials": [
+        {
+            "yearly_growth": {
+                "code": null,
+                "year": null
+            },
+            "yearly_revenue": {
+                "reported_date": null,
+                "code": "Less than 1M",
+                "year": null,
+                "currency": "USD"
+            },
+            "priority": 1
+        },
+        {
+            "yearly_growth": {
+                "code": null,
+                "year": null
+            },
+            "yearly_revenue": {
+                "reported_date": null,
+                "code": "Less than 1M",
+                "year": null,
+                "currency": "GBP"
+            },
+            "priority": 2
+        }
+    ],
+    "company_employees": {
+        "number_of_employees_code": "Less than 10"
+    },
+    "company_web_address": {
+        "url": "http://www.greenfieldsturf.co.uk/"
+    },
+    "company_description": null,
+    "company_last_modified_date": "2024-10-30 00:00:00",
+    "company_primary_address": {
+        "continent": "Europe",
+        "country": "United Kingdom",
+        "city": "Horwich",
+        "county": "Greater Manchester",
+        "state": "England",
+        "region": null
+    },
+    "company_domain": "greenfieldsturf.co.uk",
+    "company_domain_aliases": [
+        "greenfieldsturf.co.uk"
+    ],
+    "company_name": "GREENFIELDS (SPORTS SURFACES) UK LTD",
+    "company_status": {
+        "status": "Active"
+    },
+    "company_installs_count": 6,
+    "company_industries": [
+        {
+            "code4": "1629",
+            "standard": "USSIC87",
+            "code3": null,
+            "code2": "16",
+            "activity_priority": 1,
+            "priority": 1,
+            "code6": null,
+            "code5": null,
+            "name6": null,
+            "name5": null,
+            "name4": "Heavy construction, nec",
+            "name3": null,
+            "id": "ussic87_1629",
+            "name2": "Heavy Construction, Except Building Construction, Contractor"
+        }
+    ]
+  }
+}
