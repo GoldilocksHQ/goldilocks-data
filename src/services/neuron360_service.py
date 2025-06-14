@@ -1,4 +1,5 @@
 import logging
+import time
 import requests
 from src.utils.config import config
 
@@ -22,7 +23,7 @@ class Neuron360Service:
 
     def search_profiles(self, payload: dict) -> dict:
         """
-        Performs a profile search using the Neuron360 API.
+        Performs a profile search using the Neuron360 API with a retry mechanism.
 
         Args:
             payload (dict): The search parameters payload.
@@ -36,18 +37,44 @@ class Neuron360Service:
         """
         headers = {"x-api-key": self.api_key, "Content-Type": "application/json"}
         logger.info(f"Sending request to {self.search_url}")
-        try:
-            response = requests.post(
-                self.search_url, headers=headers, json=payload, timeout=30
-            )
-            response.raise_for_status()
 
+        last_exception = None
+        for attempt in range(3):
             try:
-                return response.json()
-            except requests.exceptions.JSONDecodeError as exc:
-                logger.error("Failed to decode JSON from response.")
-                raise ValueError("Invalid JSON response from API.") from exc
+                response = requests.post(
+                    self.search_url, headers=headers, json=payload, timeout=30
+                )
+                # Raise HTTPError for bad responses (4xx or 5xx)
+                response.raise_for_status()
 
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Request to Neuron360 API failed: {e}")
-            raise
+                try:
+                    return response.json()
+                except requests.exceptions.JSONDecodeError as exc:
+                    logger.error("Failed to decode JSON from response.")
+                    raise ValueError("Invalid JSON response from API.") from exc
+
+            except requests.exceptions.RequestException as e:
+                last_exception = e
+                # Check if the error is a 5xx server error
+                if (
+                    hasattr(e, "response")
+                    and e.response is not None
+                    and 500 <= e.response.status_code < 600
+                ):
+                    wait_time = 2**attempt  # Exponential backoff
+                    logger.warning(
+                        f"Attempt {attempt + 1}/3 failed with server error: {e}. "
+                        f"Retrying in {wait_time} seconds..."
+                    )
+                    time.sleep(wait_time)
+                else:
+                    # For non-5xx errors, fail immediately
+                    logger.error(
+                        "Request to Neuron360 API failed with non-retryable "
+                        f"error: {e}"
+                    )
+                    raise
+
+        # If all retries fail, raise the last captured exception
+        logger.error("All retry attempts failed.")
+        raise last_exception

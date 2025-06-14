@@ -18,24 +18,35 @@ class ProfileSearchManager:
     parameter construction, pagination, and response storage.
     """
 
-    def __init__(self):
-        """Initializes the manager and the underlying Neuron360 service."""
+    def __init__(self, output_dir: str = "data/neuron360/profile_search"):
+        """
+        Initializes the manager and the underlying Neuron360 service.
+        Args:
+            output_dir (str): The directory where response files will be saved.
+        """
         self.neuron360_service = Neuron360Service()
-        self.response_dir = "data/neuron360/profile_search"
+        self.response_dir = output_dir
         os.makedirs(self.response_dir, exist_ok=True)
 
-    def _save_response_to_file(self, response: dict) -> str:
+    def _save_response_to_file(
+        self, response: dict, sub_dir_path: Optional[str] = None
+    ) -> str:
         """
         Saves the API response to a timestamped JSON file.
-
         Args:
             response (dict): The dictionary containing the API response.
-
+            sub_dir_path (str, optional): A path for a sub-directory.
         Returns:
             str: The path to the saved file.
         """
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        file_path = os.path.join(self.response_dir, f"response_{timestamp}.json")
+
+        target_dir = self.response_dir
+        if sub_dir_path:
+            target_dir = os.path.join(self.response_dir, sub_dir_path)
+            os.makedirs(target_dir, exist_ok=True)
+
+        file_path = os.path.join(target_dir, f"response_{timestamp}.json")
         try:
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(response, f, indent=4)
@@ -64,25 +75,25 @@ class ProfileSearchManager:
         page_number: int = 1,
         page_size: int = 100,
         parameters: Optional[Dict[str, Any]] = None,
+        output_sub_dir: Optional[str] = None,
         **kwargs: Any,
-    ) -> Optional[Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         """
         Builds and executes a profile search query, then saves the response.
-
-        It accepts filter parameters as kwargs (e.g.,
-        `job_titles=["Software Engineer"]`) or a complete `parameters`
-        dictionary for complex queries. Enum members are automatically
-        converted to their string values if using kwargs.
-
+        It accepts filter parameters as kwargs (e.g., `job_titles=["SE"]`)
+        or a complete `parameters` dictionary for complex queries.
+        Enum members are automatically converted to their string values.
         Args:
             page_number (int): The page number for pagination (1-100).
             page_size (int): The number of results per page (1-100).
-            parameters (dict, optional): A pre-built dictionary of search
-                parameters for complex queries.
+            parameters (dict, optional): A pre-built dictionary of search params.
+            output_sub_dir (str, optional): Sub-directory to save response in.
             **kwargs: Search filter parameters for simple key-value searches.
-
         Returns:
-            A dictionary containing the API response, or None if it fails.
+            A dictionary containing the API response.
+        Raises:
+            requests.exceptions.RequestException: If the request fails after retries.
+            ValueError: If the input parameters are invalid.
         """
         if not 1 <= page_size <= 100:
             msg = "page_size must be between 1 and 100."
@@ -123,8 +134,11 @@ class ProfileSearchManager:
         try:
             response_data = self.neuron360_service.search_profiles(payload)
             if response_data:
-                self._save_response_to_file(response_data)
+                self._save_response_to_file(response_data, sub_dir_path=output_sub_dir)
             return response_data
         except (requests.exceptions.RequestException, ValueError) as e:
-            logger.error(f"Profile search failed: {e}")
-            return None
+            # Re-raise the exception to be handled by the caller
+            logger.error(
+                f"Profile search failed for payload: {log_payload}. Error: {e}"
+            )
+            raise
