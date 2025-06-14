@@ -4,6 +4,7 @@ from src.models import people as people_models
 from src.managers.organisation_manager import OrganisationManager
 from typing import Dict, Any, Optional
 from datetime import datetime, date
+import json
 
 
 class PeopleManager(BaseManager):
@@ -45,6 +46,48 @@ class PeopleManager(BaseManager):
             return datetime.strptime(str(date_str).split(" ")[0], "%Y-%m-%d").date()
         except (ValueError, AttributeError):
             return None
+
+    def process_people_from_file(self, file_path: str) -> tuple[int, int]:
+        """
+        Processes a file containing a list of person records.
+
+        Args:
+            file_path (str): The path to the JSON file.
+
+        Returns:
+            tuple[int, int]: A tuple containing the success count and failure count.
+        """
+        success_count = 0
+        failure_count = 0
+        try:
+            with open(file_path, "r") as f:
+                data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            self._log_error(f"Could not read or parse file {file_path}: {e}")
+            # If the file is invalid, all its records are considered failures.
+            try:
+                # Attempt to count records if possible, otherwise return 0,0
+                with open(file_path, "r") as f:
+                    # A crude way to estimate line count for malformed JSON
+                    num_records = len(f.readlines())
+                return 0, num_records
+            except Exception:
+                return 0, 0  # Cannot even open the file
+
+        profiles = data.get("results", [])
+        if not profiles:
+            self._log_error(f"No 'results' key found or list is empty in {file_path}.")
+            return 0, 0
+
+        for person_record in profiles:
+            try:
+                self.process_person_data(person_record)
+                success_count += 1
+            except Exception as e:
+                self._log_error(f"Failed to process person record: {e}", exc_info=True)
+                failure_count += 1
+
+        return success_count, failure_count
 
     def process_person_data(self, person_record: Dict[str, Any]):
         """
@@ -121,7 +164,17 @@ class PeopleManager(BaseManager):
             "headline": data.get("profile_headline"),
         }
         profile = people_models.Profile(people_id=people_id, **profile_details)
-        self.profile_service.create(profile)
+        created_profile = self.profile_service.create(profile)
+
+        # CRITICAL: Check if profile was created before proceeding
+        if not created_profile:
+            self._log_error(
+                "Failed to create profile for people_id: %s. "
+                "Aborting further profile-dependent inserts.",
+                people_id,
+            )
+            # We raise an exception to stop the processing for this person
+            raise Exception(f"Profile creation failed for people_id: {people_id}")
 
         # Other direct profile relations
         if data.get("profile_gender"):
@@ -189,32 +242,26 @@ class PeopleManager(BaseManager):
             # 3. Process nested details for the experience
             job_title_details_data = exp_data.get("job_title_details")
             if job_title_details_data:
+                raw_title_data = job_title_details_data.get("raw_job_title", {})
+                translated_title_data = job_title_details_data.get(
+                    "raw_translated_job_title", {}
+                )
+                normalized_title_data = job_title_details_data.get(
+                    "normalized_job_title", {}
+                )
+
                 processed_jtd = {
-                    "raw_job_title": job_title_details_data.get(
-                        "raw_job_title", {}
-                    ).get("job_title"),
-                    "raw_job_title_language_code": job_title_details_data.get(
-                        "raw_job_title", {}
-                    ).get("language_code"),
-                    "raw_job_title_language_detection_confidence_score": job_title_details_data.get(
-                        "raw_job_title", {}
-                    ).get(
+                    "raw_job_title": raw_title_data.get("job_title"),
+                    "raw_job_title_language_code": raw_title_data.get("language_code"),
+                    "raw_job_title_language_detection_confidence_score": raw_title_data.get(
                         "language_detection_confidence_score"
                     ),
-                    "raw_translated_job_title": job_title_details_data.get(
-                        "raw_translated_job_title", {}
-                    ).get("job_title"),
-                    "raw_translated_job_title_language_code": job_title_details_data.get(
-                        "raw_translated_job_title", {}
-                    ).get(
+                    "raw_translated_job_title": translated_title_data.get("job_title"),
+                    "raw_translated_job_title_language_code": translated_title_data.get(
                         "language_code"
                     ),
-                    "normalized_job_title_id": job_title_details_data.get(
-                        "normalized_job_title", {}
-                    ).get("id"),
-                    "normalized_job_title": job_title_details_data.get(
-                        "normalized_job_title", {}
-                    ).get("job_title"),
+                    "normalized_job_title_id": normalized_title_data.get("id"),
+                    "normalized_job_title": normalized_title_data.get("job_title"),
                 }
                 processed_jtd = {
                     k: v for k, v in processed_jtd.items() if v is not None
@@ -223,7 +270,7 @@ class PeopleManager(BaseManager):
                     jtd = people_models.JobTitleDetail(
                         experience_id=exp_id, **processed_jtd
                     )
-                self.job_title_detail_service.create(jtd)
+                    self.job_title_detail_service.create(jtd)
 
             job_functions_data = exp_data.get("job_functions", [])
             for jf_data in job_functions_data:

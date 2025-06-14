@@ -18,11 +18,11 @@ logging.basicConfig(
 # --- Constants ---
 MAX_PROFILES_PER_QUERY = 10000
 PAGE_SIZE = 100
-REQUEST_DELAY_SECONDS = 0.07
+REQUEST_DELAY_SECONDS = 0.00
 
 # --- Global Components ---
 FAILED_REQUEST_LOGGER = setup_failed_request_logger()
-OUTPUT_DIR = "data/neuron360/systematic_search_results"
+OUTPUT_DIR = "/Volumes/PSSD/goldilocks/data/neuron360/profile_search_uk_results"
 TRACKER = ProgressTracker()
 MANAGER = ProfileSearchManager(output_dir=OUTPUT_DIR)
 PARAMETER_PROVIDER = ParameterProvider()
