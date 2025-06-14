@@ -1,0 +1,561 @@
+{
+    "query": {
+        "reveal_all_data": "boolean",
+        "page_size": "integer",
+        "page_number": "integer",
+        "parameters": {
+        }
+    },
+    "counts": {
+        "companies_total_results": "integer",
+        "companies_total_returned": "integer",
+        "offices_total_results": "integer",
+        "offices_total_returned": "integer",
+        "technologies_total_results": "integer",
+        "technologies_total_returned": "integer",
+        "profiles_total_results": "integer",
+        "profiles_total_returned": "integer"
+    },
+    "results": [
+        {
+        "position": "integer",
+        "profile_data": {
+            "profile_last_modified_date": "string (YYYY-MM-DD HH:MM:SS)",
+            "profile_last_seen_date": "string (YYYY-MM-DD HH:MM:SS)",
+            "profile_id": "string",
+            "profile_first_name": "string",
+            "profile_last_name": "string",
+            "profile_full_name": "string",
+            "profile_picture": {
+                "url":  "string"
+            },
+            "profile_summary": "string",
+            "profile_languages": ["string"],
+            "profile_gender": {
+                "gender": "string",
+                "confidence_score": "float"
+            },
+            "profile_expertises": ["string"],
+            "profile_social_links": [
+                {
+                    "name": "string",
+                    "url": "string"
+                }
+            ],
+            "profile_tags": ["string"],
+            "profile_status": {
+                "status": "string"
+            },
+            "profile_prior_industries": ["string"],
+            "profile_emails": [
+                {
+                "email": "string",
+                "priority": "integer"
+                }
+            ],
+            "profile_phones": [
+                {
+                "phone": "string",
+                "ddi": "boolean",
+                "dnc": "boolean",
+                "type": "string",
+                "carrier": "string",
+                "priority": "integer"
+                }
+            ],
+            "profile_address": {
+                "last_modified_date": "string",
+                "formatted_address": "string",
+                "street_address":  "string",
+                "place_id": "string",
+                "lat": "float",
+                "lng": "float",
+                "accuracy": "string",
+                "confidence_score": "float",
+                "quality": "string",
+                "administrative_area_level_1": "string",
+                "administrative_area_level_2": "string",
+                "administrative_area_level_3": "string",
+                "administrative_area_level_4": "string",
+                "administrative_area_level_5": "string",
+                "continent": "string",
+                "country": "string",
+                "country_code": "string",
+                "establishment": "string",
+                "locality": "string",
+                "postal_code": "string",
+                "postal_town": "string",
+                "premise": "string",
+                "county": "string",
+                "state": "string",
+                "city": "string",
+                "street": "string",
+                "street_number": "string",
+                "sublocality": "string",
+                "subpremise": "string",
+                "score": "float"
+            },
+            "raw_location": "string",
+            "profile_headline": "string"
+        },
+        "contact_data": {
+        "contact_last_modified_date": "string",
+        "contact_current_experiences": [
+            {
+            "company_id": "string",
+            "office_id": "string",
+            "company_name": "string",
+            "company_domain": "string",
+            "company_logo_url": "string",
+            "company_web_address": {
+                "url": "string",
+                "rank": "integer"
+            },
+            "company_employees": {
+                "number_of_employees": "integer",
+                "number_of_employees_code": "string",
+                "number_of_employees_min": "integer",
+                "number_of_employees_max": "integer"
+            },
+            "company_industry": "string",
+            "office_address": {
+                "last_modified_date": "string",
+                "formatted_address": "string",
+                "street_address": "string",
+                "place_id": "string",
+                "lat": "float",
+                "lng": "float",
+                "accuracy": "string",
+                "confidence_score": "float",
+                "quality": "string",
+                "administrative_area_level_1": "string",
+                "administrative_area_level_2": "string",
+                "administrative_area_level_3": "string",
+                "administrative_area_level_4": "string",
+                "administrative_area_level_5": "string",
+                "continent": "string",
+                "country": "string",
+                "country_code": "string",
+                "establishment": "string",
+                "locality": "string",
+                "postal_code": "string",
+                "postal_town": "string",
+                "premise": "string",
+                "county": "string",
+                "state": "string",
+                "city": "string",
+                "street": "string",
+                "street_number": "string",
+                "sublocality": "string",
+                "subpremise": "string",
+                "score": "float"
+            },
+            "job_title": "string",
+            "job_title_details": {
+                "raw_job_title": {
+                    "job_title": "string",
+                    "language_code": "string",
+                    "language_detetion_confidence_score": "float"
+                    },
+                "raw_translated_job_title": {
+                    "job_title": "string"
+                    },
+                "normalized_job_title": {
+                    "id": "integer",
+                    "job_title": "string"
+                    }
+            },
+            "job_functions": [
+                {
+                "level1": {
+                    "code": "string",
+                    "name": "string",
+                    "confidence_score": "float"
+                },
+                "level2": {
+                    "code": "string",
+                    "name": "string",
+                    "confidence_score": "float"
+                },
+                "level3": {
+                    "code": "string",
+                    "name": "string",
+                    "confidence_score": "float"
+                },
+                "priority": "integer"
+                }
+            ],
+            "job_seniority": {
+                "job_level": "string"
+            },
+            "start_date": "string (YYYY-MM-DD)",
+            "end_date": "string (YYYY-MM-DD)",
+            "summary": "string",
+            "current": "boolean",
+            "priority": "integer",
+            "company_social_links": {
+                "linkedin": {
+                    "url": "string"
+                },
+                "twitter": {
+                    "url": "string"
+                },
+                "facebook": {
+                    "url": "string"
+                },
+                "instagram": {
+                    "url": "string"
+                },
+                "youtube": {
+                    "url": "string"
+                },
+                "crunchbase": {
+                   "url": "string"
+                },
+                "yelp": {
+                   "url": "string"
+                }
+            },
+            "company_industries": [
+                {
+                "id": "string",
+                "code2": "string",
+                "name2": "string",
+                "code3": "string",
+                "name3": "string",
+                "code4": "string",
+                "name4": "string",
+                "code5": "string",
+                "name5": "string",
+                "code6": "string",
+                "name6": "string",
+                "standard": "string",
+                "activity_priority": "integer",
+                "priority": "integer"
+                }
+            ],
+            "office_industries": [
+                {
+                "id": "string",
+                "code2": "string",
+                "name2": "string",
+                "code3": "string",
+                "name3": "string",
+                "code4": "string",
+                "name4": "string",
+                "code5": "string",
+                "name5": "string",
+                "code6": "string",
+                "name6": "string",
+                "standard": "string",
+                "activity_priority": "integer",
+                "priority": "integer"
+                }
+            ],
+            "company_phones": [
+                {
+                "phone": "string",
+                "ddi": "boolean",
+                "dnc": "boolean",
+                "type": "string",
+                "carrier": "string",
+                "priority": "integer"
+                }
+            ],
+            "raw_location": "string"
+            }
+        ],
+        "contact_emails": [
+                {
+                "email": "string",
+                "priority": "integer"
+                }
+        ],
+        "contact_phones": [
+                {
+                "phone": "string",
+                "ddi": "boolean",
+                "dnc": "boolean",
+                "type": "string",
+                "carrier": "string",
+                "priority": "integer"
+                }
+            ],
+        "contact_tags": ["string"]
+        },
+        "resume_data": {
+            "resume_last_modified_date": "string",
+            "experiences": [
+                {
+                "company_id": "string",
+                "office_id": "string",
+                "company_name": "string",
+                "company_domain": "string",
+                "company_logo_url": "string",
+                "company_web_address": {
+                    "url": "string",
+                    "rank": "integer"
+                },
+                "company_employees": {
+                    "number_of_employees": "integer",
+                    "number_of_employees_code": "string",
+                    "number_of_employees_min": "integer",
+                    "number_of_employees_max": "integer"
+                },
+                "company_industry": "string",
+                "office_address": {
+                    "last_modified_date": "string",
+                    "formatted_address": "string",
+                    "street_address": "string",
+                    "place_id": "string",
+                    "lat": "float",
+                    "lng": "float",
+                    "accuracy": "string",
+                    "confidence_score": "float",
+                    "quality": "string",
+                    "administrative_area_level_1": "string",
+                    "administrative_area_level_2": "string",
+                    "administrative_area_level_3": "string",
+                    "administrative_area_level_4": "string",
+                    "administrative_area_level_5": "string",
+                    "continent": "string",
+                    "country": "string",
+                    "country_code": "string",
+                    "establishment": "string",
+                    "locality": "string",
+                    "postal_code": "string",
+                    "postal_town": "string",
+                    "premise": "string",
+                    "county": "string",
+                    "state": "string",
+                    "city": "string",
+                    "street": "string",
+                    "street_number": "string",
+                    "sublocality": "string",
+                    "subpremise": "string",
+                    "score": "float"
+                },
+                "job_title": "string",
+                "job_title_details": {
+                    "raw_job_title": {
+                        "job_title": "string",
+                        "language_code": "string",
+                        "language_detetion_confidence_score": "float"
+                        },
+                    "raw_translated_job_title": {
+                        "job_title": "string",
+                        "language_code": "string"
+                        },
+                    "normalized_job_title": {
+                        "id": "integer",
+                        "job_title": "string"
+                        }
+                },
+                "job_functions": [
+                    {
+                    "level1": {
+                        "code": "string",
+                        "name": "string",
+                        "confidence_score": "float"
+                    },
+                    "level2": {
+                        "code": "string",
+                        "name": "string",
+                        "confidence_score": "float"
+                    },
+                    "level3": {
+                        "code": "string",
+                        "name": "string",
+                        "confidence_score": "float"
+                    },
+                    "priority": "integer"
+                    }
+                ],
+                "job_seniority": {
+                    "job_level": "string"
+                },
+                "start_date": "string (YYYY-MM-DD)",
+                "end_date": "string (YYYY-MM-DD)",
+                "summary": "string",
+                "current": "boolean",
+                "priority": "integer",
+                "company_social_links": {
+                    "linkedin": {
+                        "url": "string"
+                    },
+                    "twitter": {
+                        "url": "string"
+                    },
+                    "facebook": {
+                        "url": "string"
+                    },
+                    "instagram": {
+                        "url": "string"
+                    },
+                    "youtube": {
+                        "url": "string"
+                    },
+                    "crunchbase": {
+                       "url": "string"
+                    },
+                    "yelp": {
+                       "url": "string"
+                    }
+                },
+                "company_industries": [
+                    {
+                    "id": "string",
+                    "code2": "string",
+                    "name2": "string",
+                    "code3": "string",
+                    "name3": "string",
+                    "code4": "string",
+                    "name4": "string",
+                    "code5": "string",
+                    "name5": "string",
+                    "code6": "string",
+                    "name6": "string",
+                    "standard": "string",
+                    "activity_priority": "integer",
+                    "priority": "integer"
+                    }
+                ],
+                "office_industries": [
+                    {
+                    "id": "string",
+                    "code2": "string",
+                    "name2": "string",
+                    "code3": "string",
+                    "name3": "string",
+                    "code4": "string",
+                    "name4": "string",
+                    "code5": "string",
+                    "name5": "string",
+                    "code6": "string",
+                    "name6": "string",
+                    "standard": "string",
+                    "activity_priority": "integer",
+                    "priority": "integer"
+                    }
+                ],
+                "company_phones": [
+                    {
+                    "phone": "string",
+                    "ddi": "boolean",
+                    "dnc": "boolean",
+                    "type": "string",
+                    "carrier": "string",
+                    "priority": "integer"
+                    }
+                ],
+                "raw_location": "string"
+                }
+            ],
+            "educations": [
+                {
+                "educational_establishment": "string",
+                "diploma": "string",
+                "specialization": "string",
+                "start_date": "string (YYYY-MM-DD)",
+                "end_date": "string (YYYY-MM-DD)",
+                "educational_establishment_web_address": {
+                    "url": "string",
+                    "rank": "integer"
+                },
+                "priority": "integer"
+                }
+            ],
+            "certifications": [
+                {
+                "name": "string",
+                "description": "string",
+                "authority": "string",
+                "reference": "string",
+                "web_address": {
+                    "url": "string",
+                    "rank": "integer"
+                },
+                "date": "string (YYYY-MM-DD)",
+                "start_date": "string (YYYY-MM-DD)",
+                "end_date": "string (YYYY-MM-DD)",
+                "priority": "integer"
+                }
+            ],
+            "memberships": [
+                {
+                "title": "string",
+                "description": "string",
+                "reference": "string",
+                "web_address": {
+                    "url": "string",
+                    "rank": "integer"
+                },
+                "name": "string",
+                "start_date": "string (YYYY-MM-DD)",
+                "end_date": "string (YYYY-MM-DD)",
+                "location": "string",
+                "priority": "integer"
+                }
+            ],
+            "publications": [
+                {
+                "name": "string",
+                "description": "string",
+                "reference": "string",
+                "issue": "string",
+                "web_address": {
+                    "url": "string",
+                    "rank": "integer"
+                },
+                "date": "string (YYYY-MM-DD)",
+                "priority": "integer"
+                }
+            ],
+            "patents": [
+                {
+                "name": "string",
+                "issue": "string",
+                "number": "string",
+                "web_address": {
+                    "url": "string",
+                    "rank": "integer"
+                },
+                "date": "string (YYYY-MM-DD)",
+                "start_date": "string (YYYY-MM-DD)",
+                "end_date": "string (YYYY-MM-DD)",
+                "priority": "integer"
+                }
+            ],
+            "awards": [
+                {
+                "name": "string",
+                "description": "string",
+                "issue": "string",
+                "date": "string (YYYY-MM-DD)",
+                "priority": "integer"
+                }
+            ],
+            "resume_tags": ["string"]
+        },
+        "profile_metrics": {
+            "completion_score": "float"
+        }
+        }
+    ],
+    "pagination": {
+        "current": "integer",
+        "last_page": "integer",
+        "next_page": "integer"
+    },
+    "transaction_detail": {
+        "id": "string",
+        "account_number": "string",
+        "account_type": "string",
+        "product_name": "string",
+        "endpoint": "string",
+        "profile_record_credits_used": "integer",
+        "profile_record_credits_available": "integer",
+        "execute_at": "string (YYYY-MM-DD HH:MM:SS)",
+        "total_time_taken": "float"
+    }
+}

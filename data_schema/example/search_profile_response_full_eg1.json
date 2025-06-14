@@ -1,0 +1,1332 @@
+{
+  "query": {
+      "reveal_all_data": false,
+      "page_size": 1,
+      "page_number": 1,
+      "parameters": {
+          "job_titles": [
+              {
+                  "value": [
+                      "Founder"
+                  ],
+                  "operator": "is one of"
+              }
+          ],
+          "countries": [
+              {
+                  "value": [
+                      "United Kingdom"
+                  ],
+                  "operator": "is one of"
+              }
+          ],
+          "previous_company_names": [
+              {
+                  "value": [
+                      "Antler"
+                  ],
+                  "operator": "is one of"
+              }
+          ]
+      }
+  },
+  "counts": {
+      "companies_total_results": null,
+      "companies_total_returned": null,
+      "contacts_total_results": null,
+      "contacts_total_returned": null,
+      "offices_total_results": null,
+      "offices_total_returned": null,
+      "profiles_total_results": 576,
+      "profiles_total_returned": 100,
+      "technologies_total_results": null,
+      "technologies_total_returned": null
+  },
+  "results": [
+      {
+          "position": 1,
+          "profile_metrics": {
+              "completion_score": 0.62
+          },
+          "profile_data": {
+              "profile_expertises": [
+                  "3d",
+                  "3d printing",
+                  "3d scanning",
+                  "adobe photoshop",
+                  "art",
+                  "cad",
+                  "computer-aided design (cad)",
+                  "concept art",
+                  "concept design",
+                  "concept development",
+                  "concept generation",
+                  "design strategy",
+                  "design thinking",
+                  "graphic design",
+                  "industrial design",
+                  "interior design",
+                  "laser cutting",
+                  "laser engraving",
+                  "manufacturing",
+                  "materials",
+                  "product design",
+                  "project management",
+                  "sketching",
+                  "wireframing",
+                  "computer aided design"
+              ],
+              "r_skills": [
+                  {
+                      "subcategory_id": 702,
+                      "category_id": 7,
+                      "confidence_score": 1,
+                      "skill_name": "Product Design",
+                      "skill_id": 24328,
+                      "category": "Design",
+                      "subcategory": "Design Tools & Software"
+                  },
+                  {
+                      "subcategory_id": 2003,
+                      "category_id": 20,
+                      "confidence_score": 1,
+                      "skill_name": "Consulting",
+                      "skill_id": 7336,
+                      "category": "Management",
+                      "subcategory": "Consulting and Advisory Services"
+                  }
+              ],
+              "profile_summary": "Award-winning Product Designer / Mechanical Engineer / Inventor / Entrepreneur. Speaker at TEDx, V&A Museum, Pecha Kucha, Develop3D and Shoreditch Design Festival. \n\nSpecialist in 'makerspace' implementation and experiential events using digital manufacturing technologies such as laser cutting & engraving and 3D printing. \n\nFounder of three companies:\n- MakersCAFE: Laser cutting, 3D printing and coffee in one place. UK’s first 3D printing cafe. \n- RazorLAB: Online Laser Cutting and Engraving service provider. All automated and open 24/7 with NO setup fees, NO min orders and super-fast delivery.\n- SOPDS (Soner Ozenc Product Design Studio): Generates innovative ideas and converts them into profitable product & service proposals. It also provides Product Design Consultancy services and is involved in every stage of the product design development process -from concept generation and sketching to CAD and material & manufacturer sourcing.\n\n‘Tornado’ design has been awarded with the first prize in Bombay Sapphire Designer Glass Competition. 'EL Sajjadah' design has appeared on the cover of T3 Magazine -No 1 Gadget Magazine in the world- with a four page exclusive preview. The same product has been selected as one of the Design Classics of the Future by The Independent newspaper. It is now part of MoMA permanent collection. ‘Time Curtain’ design has been bought by Design Museum in Seoul, South Korea. CMYKshade has been sold at MoMA shop and is now the official lighting for the food chain Wrap It Up, London, UK. \n\nExhibited in highly acclaimed exhibitions worldwide: the UK, Italy, Germany, Austria, South Korea, Saudi Arabia, Kuwait and Japan. Received significant worldwide press attention so far from Elle Decor, I.D. Magazine, Art Review, The Independent, Evening Standard, TimeOut, BBC, Channel 4, Wall Street Journal.",
+              "profile_picture": {
+                  "url": "https://media.licdn.com/dms/image/v2/D4E03AQFDyxUsHG5Mkg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1710696206777?e=1741824000&v=beta&t=D-369AWiJvIHdiUg98b0lNk6EBUxUkl1749tUXhP7aM"
+              },
+              "profile_last_seen_date": "2025-02-06 00:00:00",
+              "profile_headline": "Product Design Consultant (MAID @ Central St Martins). Digital Manufacturing, Experiential Events. Founder @ MakersCAFE & RazorLAB. Coffee Lover. TEDx Speaker. Mentor @ Central St Martins. Design Prof @ Design Museum",
+              "profile_first_name": "Soner",
+              "profile_last_name": "Ozenc",
+              "profile_status": {
+                  "status": null
+              },
+              "profile_address": {
+                  "continent": "Europe",
+                  "country": "United Kingdom",
+                  "city": "London",
+                  "county": null,
+                  "state": "England",
+                  "region": null
+              },
+              "profile_id": "prof-shli-1894231214f1c24499892b455cca9e58",
+              "profile_languages": [],
+              "raw_location": "London, England, United Kingdom",
+              "profile_prior_industries": [],
+              "profile_last_modified_date": "2025-02-16 00:00:00",
+              "profile_tags": [
+                  "Profile Has Social Link",
+                  "Profile Has Email",
+                  "Profile Has Phone",
+                  "Profile Has Expertise",
+                  "Profile Has Mobile Phone"
+              ],
+              "profile_full_name": "Soner Ozenc"
+          },
+          "contact_data": {
+              "contact_tags": [
+                  "Contact Has Current Experience",
+                  "Contact Has Email"
+              ],
+              "contact_current_experiences": [
+                  {
+                      "end_date": null,
+                      "company_logo_url": null,
+                      "office_type": "Headquarter/Parent",
+                      "contact_emails": [
+                          {
+                              "priority": null,
+                              "email": "soner.ozenc@makerscafe.com"
+                          }
+                      ],
+                      "company_revenue_in_usd": 416448,
+                      "office_phones": [],
+                      "office_industries": [
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          },
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          }
+                      ],
+                      "company_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "street_address": "24 St Francis Road",
+                          "formatted_address": null,
+                          "city": "London",
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-01-08 07:41:37",
+                          "score": 0.78,
+                          "premise": null,
+                          "street": null,
+                          "state": "England",
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": "GB",
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": "SE22 8DE",
+                          "region": "Greater London"
+                      },
+                      "company_financials": [
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 416448,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Unknown"
+                              },
+                              "priority": 1
+                          }
+                      ],
+                      "office_id": "offi-rcfr-d6400987994553d70eb9b17d93762f12",
+                      "current": true,
+                      "company_domain": "makerscafe.com",
+                      "company_industries": [
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          },
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          }
+                      ],
+                      "job_title": "Founder",
+                      "contact_phones": [],
+                      "start_date": null,
+                      "summary": null,
+                      "company_id": "comp-rcfr-d6400987994553d70eb9b17d93762f12",
+                      "company_revenue_in_usd_code": "Less than 1M",
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 1,
+                      "company_employees": {
+                          "number_of_employees_code": "Less than 10"
+                      },
+                      "company_industry": "Business services, nec",
+                      "company_web_address": {
+                          "url": "http://www.makerscafe.com/"
+                      },
+                      "office_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "city": "London",
+                          "county": null,
+                          "state": "England",
+                          "region": "Greater London"
+                      },
+                      "company_name": "Makerscafe - Live Laser Engravers For Events",
+                      "raw_location": "London, United Kingdom"
+                  },
+                  {
+                      "end_date": null,
+                      "company_logo_url": null,
+                      "office_type": null,
+                      "contact_emails": [
+                          {
+                              "priority": null,
+                              "email": "soner.ozenc@razorlab.co.uk"
+                          }
+                      ],
+                      "company_revenue_in_usd": 1020422,
+                      "office_phones": [],
+                      "office_industries": [],
+                      "company_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "street_address": "24 St Francis Rd",
+                          "formatted_address": null,
+                          "city": "London",
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-01-08 07:41:37",
+                          "score": 0.78,
+                          "premise": null,
+                          "street": null,
+                          "state": "England",
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": "GB",
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": "SE22 8DE",
+                          "region": "Greater London"
+                      },
+                      "company_financials": [
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 35549,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Modeled"
+                              },
+                              "priority": 1
+                          },
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 28039,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "GBP",
+                                  "type": "Modeled"
+                              },
+                              "priority": 2
+                          },
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 1020422,
+                                  "code": "1M - 2M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Unknown"
+                              },
+                              "priority": 3
+                          }
+                      ],
+                      "office_id": null,
+                      "current": true,
+                      "company_domain": "razorlab.online",
+                      "company_industries": [
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          },
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          },
+                          {
+                              "code4": "3999",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "39",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Manufacturing industries, nec",
+                              "name3": null,
+                              "id": "ussic87_3999",
+                              "name2": "Miscellaneous Manufacturing Industries"
+                          }
+                      ],
+                      "job_title": "Chief Executive Officer / Founder",
+                      "contact_phones": [],
+                      "start_date": null,
+                      "summary": null,
+                      "company_id": "comp-rcfr-fe6b6ad3fc9b4fd618c4bb63b0c2332c",
+                      "company_revenue_in_usd_code": "1M - 2M",
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 1,
+                      "company_employees": {
+                          "number_of_employees_code": "Less than 10"
+                      },
+                      "company_industry": "Specialized Design Services",
+                      "company_web_address": {
+                          "url": "https://razorlab.online/"
+                      },
+                      "office_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "city": "London",
+                          "county": null,
+                          "state": "London",
+                          "region": null
+                      },
+                      "company_name": "Razorlab - Laser Cutting & Engraving",
+                      "raw_location": "United Kingdom"
+                  },
+                  {
+                      "end_date": null,
+                      "company_logo_url": null,
+                      "office_type": null,
+                      "contact_emails": [
+                          {
+                              "priority": null,
+                              "email": "sonerozenc@gmail.com"
+                          },
+                          {
+                              "priority": null,
+                              "email": "soner.ozenc@makerscafe.com"
+                          }
+                      ],
+                      "company_revenue_in_usd": 416448,
+                      "office_phones": [],
+                      "office_industries": [
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2022",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": null,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2022_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          },
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": null,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          },
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": null,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          }
+                      ],
+                      "company_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "street_address": "24 St Francis Road",
+                          "formatted_address": null,
+                          "city": "London",
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-01-08 07:41:37",
+                          "score": 0.78,
+                          "premise": null,
+                          "street": null,
+                          "state": "England",
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": "GB",
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": "SE22 8DE",
+                          "region": "Greater London"
+                      },
+                      "company_financials": [
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 416448,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Unknown"
+                              },
+                              "priority": 1
+                          }
+                      ],
+                      "office_id": null,
+                      "current": true,
+                      "company_domain": "makerscafe.com",
+                      "company_industries": [
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          },
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          }
+                      ],
+                      "job_title": "Founder",
+                      "contact_phones": [],
+                      "start_date": "2014-08-01 00:00:00.000",
+                      "summary": null,
+                      "company_id": "comp-rcfr-d6400987994553d70eb9b17d93762f12",
+                      "company_revenue_in_usd_code": "Less than 1M",
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 1,
+                      "company_employees": {
+                          "number_of_employees_code": "Less than 10"
+                      },
+                      "company_industry": "Business services, nec",
+                      "company_web_address": {
+                          "url": "http://www.makerscafe.com/"
+                      },
+                      "office_address": {
+                          "continent": null,
+                          "country": null,
+                          "city": null,
+                          "county": null,
+                          "state": null,
+                          "region": null
+                      },
+                      "company_name": "Makerscafe - Live Laser Engravers For Events",
+                      "raw_location": ""
+                  }
+              ],
+              "contact_last_modified_date": "2025-02-16 00:00:00"
+          },
+          "resume_data": {
+              "resume_last_modified_date": "2025-02-16 00:00:00",
+              "resume_tags": [
+                  "Resume Has Experiences",
+                  "Resume Has Membership",
+                  "Resume Has Award"
+              ],
+              "awards": [
+                  {
+                      "name": "First Prize @ Bombay Sapphire Cocktail Glass Competition, Turkey",
+                      "description": null,
+                      "priority": 1
+                  }
+              ],
+              "patents": [],
+              "educations": [
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "London College Of Fashion, University Of The Arts London",
+                      "diploma": "Masters",
+                      "priority": 1
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "Orta DoğU Teknik üNiversitesi / Middle East Technical University",
+                      "diploma": "Master Of Science",
+                      "priority": 2
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "Orta DoğU Teknik üNiversitesi / Middle East Technical University",
+                      "diploma": "Bachelors",
+                      "priority": 3
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "Central Saint Martins College Of Art And Design",
+                      "diploma": "Masters",
+                      "priority": 4
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "General Assembly",
+                      "diploma": null,
+                      "priority": 5
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "Orta DoğU Teknik üNiversitesi / Middle East Technical University",
+                      "diploma": null,
+                      "priority": 6
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "Middle East Technical University",
+                      "diploma": null,
+                      "priority": 7
+                  },
+                  {
+                      "educational_establishment_web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "educational_establishment": "Central St. Martins College Of Art And Design",
+                      "diploma": "Masters",
+                      "priority": 8
+                  }
+              ],
+              "certifications": [],
+              "experiences": [
+                  {
+                      "end_date": null,
+                      "company_logo_url": null,
+                      "office_type": null,
+                      "contact_emails": [],
+                      "company_revenue_in_usd": 416448,
+                      "office_phones": [],
+                      "office_industries": [],
+                      "company_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "street_address": "24 St Francis Road",
+                          "formatted_address": null,
+                          "city": "London",
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-01-08 07:41:37",
+                          "score": 0.78,
+                          "premise": null,
+                          "street": null,
+                          "state": "England",
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": "GB",
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": "SE22 8DE",
+                          "region": "Greater London"
+                      },
+                      "company_financials": [
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 416448,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Unknown"
+                              },
+                              "priority": 1
+                          }
+                      ],
+                      "office_id": null,
+                      "current": true,
+                      "company_domain": "makerscafe.com",
+                      "company_industries": [
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          },
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          }
+                      ],
+                      "job_title": "Founder",
+                      "contact_phones": [],
+                      "start_date": "2014-08-01 00:00:00",
+                      "summary": "MakersCAFE facilitates experiential and personalisation events by using innovative technologies like laser cutting/engraving, 3d printing, etc. \n\nMakersCAFE helps people 'make' things, providing digital manufacturing and consultancy services, on top of serving top-class coffee.\n\nList of clientele: Google, Gillette, Adidas, Lego, O2, Victorinox, Debenhams, Orlebar Brown, V&A Museum.",
+                      "company_id": "comp-rcfr-d6400987994553d70eb9b17d93762f12",
+                      "company_revenue_in_usd_code": "Less than 1M",
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 1,
+                      "company_employees": {
+                          "number_of_employees_code": "Less than 10"
+                      },
+                      "company_industry": "Business services, nec",
+                      "company_web_address": {
+                          "url": "http://www.makerscafe.com/"
+                      },
+                      "office_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "city": null,
+                          "county": null,
+                          "state": null,
+                          "region": null
+                      },
+                      "company_name": "Makerscafe - Live Laser Engravers For Events",
+                      "raw_location": "london, united kingdom"
+                  },
+                  {
+                      "end_date": null,
+                      "company_logo_url": null,
+                      "office_type": null,
+                      "contact_emails": [],
+                      "company_revenue_in_usd": 1020422,
+                      "office_phones": [],
+                      "office_industries": [],
+                      "company_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "street_address": "24 St Francis Rd",
+                          "formatted_address": null,
+                          "city": "London",
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-01-08 07:41:37",
+                          "score": 0.78,
+                          "premise": null,
+                          "street": null,
+                          "state": "England",
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": "GB",
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": "SE22 8DE",
+                          "region": "Greater London"
+                      },
+                      "company_financials": [
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 35549,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Modeled"
+                              },
+                              "priority": 1
+                          },
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 28039,
+                                  "code": "Less than 1M",
+                                  "year": null,
+                                  "currency": "GBP",
+                                  "type": "Modeled"
+                              },
+                              "priority": 2
+                          },
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 1020422,
+                                  "code": "1M - 2M",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Unknown"
+                              },
+                              "priority": 3
+                          }
+                      ],
+                      "office_id": null,
+                      "current": true,
+                      "company_domain": "razorlab.online",
+                      "company_industries": [
+                          {
+                              "code4": "5414",
+                              "standard": "NAICS2017",
+                              "code3": "541",
+                              "code2": "54",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "541490",
+                              "code5": "54149",
+                              "name6": "Other Specialized Design Services",
+                              "name5": "Other Specialized Design Services",
+                              "name4": "Specialized Design Services",
+                              "name3": "Professional, Scientific, and Technical Services",
+                              "id": "naics2017_541490",
+                              "name2": "Professional, Scientific, and Technical Services"
+                          },
+                          {
+                              "code4": "7389",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "73",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Business services, nec",
+                              "name3": null,
+                              "id": "ussic87_7389",
+                              "name2": "Business Services"
+                          },
+                          {
+                              "code4": "3999",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "39",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Manufacturing industries, nec",
+                              "name3": null,
+                              "id": "ussic87_3999",
+                              "name2": "Miscellaneous Manufacturing Industries"
+                          }
+                      ],
+                      "job_title": "Founder",
+                      "contact_phones": [],
+                      "start_date": "2009-11-01 00:00:00",
+                      "summary": "RazorLAB provides Laser Cutting and Engraving service for the Creative Industry. Clients range from fashion/product/graphic designers to advertising agencies, architects. They include big corporate names like Apple, O2, Selfridges and world-famous designers like Giles Deacon and Hussein Chalayan.\n\nRazorLAB is well-known for its bespoke iTattoo service where your most precious products (laptops, ipods, iphones, mobile phones) are laser-customised. Currently, it has been contracted by O2 to provide Mobile Phone Tattoo service at the gigs they sponsor at 11 venues around the UK -including London, Birmingham, Glasgow, Liverpool, Leeds, Sheffield, Edinburgh, Bristol, Manchester, Leicester.",
+                      "company_id": "comp-rcfr-fe6b6ad3fc9b4fd618c4bb63b0c2332c",
+                      "company_revenue_in_usd_code": "1M - 2M",
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 2,
+                      "company_employees": {
+                          "number_of_employees_code": "Less than 10"
+                      },
+                      "company_industry": "Specialized Design Services",
+                      "company_web_address": {
+                          "url": "https://razorlab.online/"
+                      },
+                      "office_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "city": null,
+                          "county": null,
+                          "state": null,
+                          "region": null
+                      },
+                      "company_name": "Razorlab - Laser Cutting & Engraving",
+                      "raw_location": "london, united kingdom"
+                  },
+                  {
+                      "end_date": null,
+                      "company_logo_url": null,
+                      "office_type": null,
+                      "contact_emails": [],
+                      "company_revenue_in_usd": null,
+                      "office_phones": [],
+                      "office_industries": [],
+                      "company_address": {
+                          "continent": null,
+                          "country": null,
+                          "street_address": null,
+                          "formatted_address": null,
+                          "city": null,
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-02-16 22:48:14",
+                          "score": null,
+                          "premise": null,
+                          "street": null,
+                          "state": null,
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": null,
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": null,
+                          "region": null
+                      },
+                      "company_financials": [],
+                      "office_id": null,
+                      "current": true,
+                      "company_domain": null,
+                      "company_industries": [],
+                      "job_title": "Founder",
+                      "contact_phones": [],
+                      "start_date": "2006-06-01 00:00:00",
+                      "summary": "SOPDS (Soner Ozenc Product Design Studio) generates innovative ideas and converts them into profitable product/service proposals. It also provides Product Design Consultancy services for UK/international clients. It is involved in every stage of the product design development process -from concept generation and sketching to CAD and material/manufacturer sourcing.\n\nIt has been awarded with the first prize in Bombay Sapphire Designer Glass Competition in 2005. In 2007, one of its products has appeared on the cover of T3 Magazine -No 1 Gadget Magazine in the world- with a four page exclusive preview. Recently, the same product has been selected as one of the Design Classics of the Future by The Independent newspaper.\n\nIts works have been exhibited in highly acclaimed exhibitions worldwide in the UK, Italy, Germany, Austria, South Korea and Japan. They have also received significant worldwide press attention so far from Elle Decor, I.D. Magazine, Art Review, The Independent, Evening Standard, etc.",
+                      "company_id": null,
+                      "company_revenue_in_usd_code": null,
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 3,
+                      "company_employees": {
+                          "number_of_employees_code": null
+                      },
+                      "company_industry": null,
+                      "company_web_address": {
+                          "url": null
+                      },
+                      "office_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "city": null,
+                          "county": null,
+                          "state": null,
+                          "region": null
+                      },
+                      "company_name": "Soner Ozenc Product Design Studio",
+                      "raw_location": "london, united kingdom"
+                  },
+                  {
+                      "end_date": "2023-09-01 00:00:00",
+                      "company_logo_url": null,
+                      "office_type": null,
+                      "contact_emails": [],
+                      "company_revenue_in_usd": 1301909940,
+                      "office_phones": [],
+                      "office_industries": [],
+                      "company_address": {
+                          "continent": "Europe",
+                          "country": "Sweden",
+                          "street_address": "57 Birger Jarlsgatan",
+                          "formatted_address": null,
+                          "city": "Stockholm",
+                          "county": null,
+                          "accuracy": null,
+                          "last_modified_date": "2025-01-08 07:41:37",
+                          "score": 0.67,
+                          "premise": null,
+                          "street": null,
+                          "state": "Stockholm",
+                          "lat": null,
+                          "place_id": null,
+                          "postal_town": null,
+                          "lng": null,
+                          "locality": null,
+                          "sublocality": null,
+                          "establishment": null,
+                          "subpremise": null,
+                          "quality": null,
+                          "country_code": "SE",
+                          "administrative_area_level_2": null,
+                          "administrative_area_level_3": null,
+                          "administrative_area_level_1": null,
+                          "confidence_score": null,
+                          "street_number": null,
+                          "administrative_area_level_4": null,
+                          "administrative_area_level_5": null,
+                          "postal_code": null,
+                          "region": null
+                      },
+                      "company_financials": [
+                          {
+                              "yearly_growth": {
+                                  "code": null,
+                                  "year": null,
+                                  "percentage": null,
+                                  "type": null
+                              },
+                              "yearly_revenue": {
+                                  "reported_date": null,
+                                  "revenue": 1301909940,
+                                  "code": "More than 1B",
+                                  "year": null,
+                                  "currency": "USD",
+                                  "type": "Unknown"
+                              },
+                              "priority": 1
+                          }
+                      ],
+                      "office_id": null,
+                      "current": false,
+                      "company_domain": "antler.co",
+                      "company_industries": [
+                          {
+                              "code4": "5239",
+                              "standard": "NAICS2017",
+                              "code3": "523",
+                              "code2": "52",
+                              "activity_priority": 1,
+                              "priority": 2,
+                              "code6": "523910",
+                              "code5": "52391",
+                              "name6": "Miscellaneous Intermediation",
+                              "name5": "Miscellaneous Intermediation",
+                              "name4": "Other Financial Investment Activities",
+                              "name3": "Securities, Commodity Contracts, and Other Financial Investments and Related Activities",
+                              "id": "naics2017_523910",
+                              "name2": "Finance and Insurance"
+                          },
+                          {
+                              "code4": "6153",
+                              "standard": "USSIC87",
+                              "code3": null,
+                              "code2": "61",
+                              "activity_priority": 1,
+                              "priority": 1,
+                              "code6": null,
+                              "code5": null,
+                              "name6": null,
+                              "name5": null,
+                              "name4": "Short-term business credit",
+                              "name3": null,
+                              "id": "ussic87_6153",
+                              "name2": "Nondepository Credit Institutions"
+                          }
+                      ],
+                      "job_title": "Entrepreneur",
+                      "contact_phones": [],
+                      "start_date": "2023-06-01 00:00:00",
+                      "summary": null,
+                      "company_id": "comp-rcfr-ec32ac925c04e1ba7a1cf63992c523c9",
+                      "company_revenue_in_usd_code": "More than 1B",
+                      "job_functions": [
+                          {
+                              "level1": {
+                                  "code": "15-00.000",
+                                  "confidence_score": 1,
+                                  "name": "General Management"
+                              }
+                          }
+                      ],
+                      "priority": 4,
+                      "company_employees": {
+                          "number_of_employees_code": "1,000 - 4,999"
+                      },
+                      "company_industry": "Other Financial Investment Activities",
+                      "company_web_address": {
+                          "url": "http://www.antler.co/"
+                      },
+                      "office_address": {
+                          "continent": "Europe",
+                          "country": "United Kingdom",
+                          "city": null,
+                          "county": null,
+                          "state": null,
+                          "region": null
+                      },
+                      "company_name": "Antler",
+                      "raw_location": "london, england, united kingdom"
+                  }
+              ],
+              "memberships": [
+                  {
+                      "name": "Mentor @ Central Saint Martins College of Art and Design",
+                      "description": null,
+                      "location": null,
+                      "web_address": {
+                          "rank": null,
+                          "url": null
+                      },
+                      "priority": 1
+                  }
+              ],
+              "publications": []
+          }
+      }
+  ],
+  "pagination": {
+      "current": 1,
+      "last_page": 100,
+      "next_page": 2
+  },
+  "transaction_detail": {
+      "id": "53e936cc-8133-4a98-b2af-04c311824b8e",
+      "endpoint": "/profile/search",
+      "profile_record_credits_used": 0,
+      "profile_record_credits_available": 1950,
+      "execute_at": "2025-03-14 13:47:05",
+      "total_time_taken": 2184.15,
+      "account_number": 1357290912,
+      "account_type": "partner",
+      "product_name": "Profile Access Premium"
+  }
+}
