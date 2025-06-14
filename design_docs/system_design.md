@@ -44,7 +44,7 @@ The application is built around three main layers: **Managers**, **Services**, a
     -   **`OrganisationManager`**: A specialized manager responsible for processing company and office data. It is instantiated and owned by the `PeopleManager`.
     -   **Inter-Manager Communication**: The `PeopleManager` delegates responsibility for company data. When processing a person's work experience, it calls `org_manager.process_organisation_data()`, passing the relevant experience data. This design ensures a clean separation of concerns, where the `PeopleManager` doesn't need to know the details of how organizations are processed.
     -   **Data Transformation**: Managers are responsible for flattening nested JSON objects, renaming keys, casting data types (e.g., string to date), and structuring data to match the Pydantic models before passing it to the services layer for persistence.
-    -   **Duplicate Handling**: The `OrganisationManager` implements logic to prevent duplicate entries by checking if an organization with a given `company_id` already exists before attempting to create a new one.
+    -   **Duplicate Handling**: The `OrganisationManager` implements logic to prevent duplicate entries by checking if an organization with a given `company_id` already exists before attempting to create a new one. The `PeopleManager` does the same for people records using the `neuron360_profile_id`.
 
 ## 3. Data Flow
 

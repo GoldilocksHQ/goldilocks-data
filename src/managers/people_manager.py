@@ -59,6 +59,16 @@ class PeopleManager(BaseManager):
                 self._log_error("No 'profile_data' found, skipping record.")
                 return
 
+            # Check for existing person by neuron360_profile_id
+            neuron_id = profile_data.get("profile_id")
+            if neuron_id:
+                existing_identity = self.identity_service.get_by_neuron_id(neuron_id)
+                if existing_identity:
+                    self.logger.info(
+                        f"Skipping existing Person with neuron_id: {neuron_id}"
+                    )
+                    return
+
             self.logger.info(
                 f"Processing person: {profile_data.get('profile_full_name')}"
             )
