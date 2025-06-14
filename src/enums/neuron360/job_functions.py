@@ -1,0 +1,40 @@
+from enum import Enum
+
+
+class JobFunction(str, Enum):
+    """
+    Enum for Neuron360 Job Functions.
+    Reference: https://docs.neuron360.io/docs/job-functions
+    """
+
+    ACCOUNTING = "Accounting"
+    ADMINISTRATIVE = "Administrative"
+    ADVERTISING = "Advertising"
+    ANALYST = "Analyst"
+    ART_AND_DESIGN = "Art/Design"
+    BUSINESS_DEVELOPMENT = "Business Development"
+    CONSULTING = "Consulting"
+    CUSTOMER_SERVICE = "Customer Service"
+    DISTRIBUTION = "Distribution"
+    EDUCATION = "Education"
+    ENGINEERING = "Engineering"
+    FINANCE = "Finance"
+    HEALTHCARE_PROVIDER = "Healthcare Provider"
+    HEALTHCARE_SERVICES = "Healthcare Services"
+    HUMAN_RESOURCES = "Human Resources"
+    INFORMATION_TECHNOLOGY = "Information Technology"
+    LEGAL = "Legal"
+    MANAGEMENT = "Management"
+    MANUFACTURING = "Manufacturing"
+    MARKETING = "Marketing"
+    OTHER = "Other"
+    PUBLIC_RELATIONS = "Public Relations"
+    PURCHASING = "Purchasing"
+    QUALITY_ASSURANCE = "Quality Assurance"
+    REAL_ESTATE = "Real Estate"
+    RESEARCH = "Research"
+    SALES = "Sales"
+    STRATEGY_PLANNING = "Strategy/Planning"
+    SUPPLY_CHAIN = "Supply Chain"
+    TRAINING = "Training"
+    WRITING_AND_EDITING = "Writing/Editing"

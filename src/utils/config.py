@@ -7,7 +7,10 @@ load_dotenv()
 
 class Config:
     """
-    Configuration class to load and manage environment variables.
+    Manages configuration settings for the application.
+
+    Loads environment variables from a .env file and provides them as
+    attributes. It also validates the presence of essential variables.
     """
 
     # Supabase
@@ -18,6 +21,7 @@ class Config:
 
     # Neuron360
     NEURON360_API_KEY = os.getenv("NEURON360_API_KEY")
+    NEURON360_API_URL = os.getenv("NEURON360_API_URL")
 
     # LLM Providers
     DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
@@ -34,6 +38,30 @@ class Config:
     ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
     DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "t")
 
+    def __init__(self):
+        """
+        Initializes the configuration by loading and validating variables.
+        """
+        load_dotenv()
 
-# Instantiate config
+        # General
+        self.log_level = os.getenv("LOG_LEVEL", "INFO")
+        self.environment = os.getenv("ENVIRONMENT", "development")
+
+        # Neuron360 API
+        self.neuron360_api_key = os.getenv("NEURON360_API_KEY")
+        self.neuron360_api_url = os.getenv("NEURON360_API_URL")
+
+        # Validate that essential variables are set
+        if not self.neuron360_api_key:
+            raise ValueError(
+                "NEURON360_API_KEY is not set in the environment variables."
+            )
+        if not self.neuron360_api_url:
+            raise ValueError(
+                "NEURON360_API_URL is not set in the environment variables."
+            )
+
+
+# Create a singleton instance for easy access across the application
 config = Config()

@@ -1,8 +1,12 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# C extensions
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -16,48 +20,121 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Virtual Environment
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
+#   However, in case of collaboration, if have platform-specific dependencies, which can result in locking conflicts.
+#   Please discuss with your project team whether to include Pipfile.lock in version control.
+#Pipfile.lock
+
+# PEP 582; used by Poetry, Flit and PDM
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
 .env
 .venv
 env/
 venv/
 ENV/
+env.bak/
+venv.bak/
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
+# Spyder project settings
+.spyderproject
+.spyderworkspace
 
-# Logs
-logs/
-*.log
+# Rope project settings
+.ropeproject
 
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
+# mkdocs documentation
+/site
 
-# Distribution
-dist/
-build/
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
-# Misc
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Goldilocks specific
+data/
+data_schema/example/
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# Example data
-data_schema/example/search_profile_response_full_eg1.json
-data_schema/example/search_profile_response_full_eg2.json
-data_schema/example/search_profile_response_full_eg3.json
-
-# Database
-/data.db
