@@ -18,7 +18,7 @@ The application is built around three main layers: **Managers**, **Services**, a
 
 ### 2.1. Models (`src/models/`)
 
--   **Purpose**: Define the canonical data structures for all entities in the system.
+-   **Purpose**: Define the canonical data structures for all entities in the system. Some nested objects from the source data (like web addresses for a person's education) are flattened and embedded directly into their parent model.
 -   **Technology**: Pydantic `BaseModel`.
 -   **Functionality**:
     -   Each table in the Supabase database has a corresponding Pydantic model (e.g., `people.identities` maps to `people.Identity`).
@@ -32,7 +32,7 @@ The application is built around three main layers: **Managers**, **Services**, a
 -   **Functionality**:
     -   **`BaseService`**: A generic class providing standard CRUD (Create, Read, Update, Delete) and `upsert` operations.
     -   **Schema-Specific Clients**: The `BaseService` is uniquely configured to handle Supabase's multi-schema environment. When a service is instantiated (e.g., `PeopleService`), it specifies a table name like `"people.identities"`. The `BaseService` constructor parses the schema (`people`) from the table name and creates a dedicated Supabase client instance using `ClientOptions(schema=schema)`. This ensures all subsequent operations for that service instance are correctly routed to the appropriate schema.
-    -   **Specialized Services**: Each table has its own service class (e.g., `people_services.IdentityService`, `organisation_services.OfficeService`) that inherits from `BaseService`, providing a clean, table-specific API to the rest of the application.
+    -   **Specialized Services**: Most tables have their own service class (e.g., `people_services.IdentityService`, `organisation_services.OfficeService`) that inherits from `BaseService`, providing a clean, table-specific API to the rest of the application. This modularity allows business logic components to request data without needing to know about the underlying database implementation.
     -   **Serialization Workaround**: The `create` and `upsert` methods in `BaseService` include a specific workaround for a known issue with `supabase-py` and Pydantic models containing UUIDs. Data is first serialized to a JSON string using `model_dump_json()` and then loaded back into a dictionary using `json.loads()`. This ensures that UUIDs and other complex types are correctly formatted before being sent to the database.
 
 ### 2.3. Managers (`src/managers/`)

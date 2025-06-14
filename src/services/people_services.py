@@ -77,26 +77,10 @@ class EducationService(BaseService):
         super().__init__(table_name="people.educations", model=people_models.Education)
 
 
-class EducationWebAddressService(BaseService):
-    def __init__(self):
-        super().__init__(
-            table_name="people.education_web_addresses",
-            model=people_models.EducationWebAddress,
-        )
-
-
 class CertificationService(BaseService):
     def __init__(self):
         super().__init__(
             table_name="people.certifications", model=people_models.Certification
-        )
-
-
-class CertificationWebAddressService(BaseService):
-    def __init__(self):
-        super().__init__(
-            table_name="people.certification_web_addresses",
-            model=people_models.CertificationWebAddress,
         )
 
 
@@ -107,14 +91,6 @@ class MembershipService(BaseService):
         )
 
 
-class MembershipWebAddressService(BaseService):
-    def __init__(self):
-        super().__init__(
-            table_name="people.membership_web_addresses",
-            model=people_models.MembershipWebAddress,
-        )
-
-
 class PublicationService(BaseService):
     def __init__(self):
         super().__init__(
@@ -122,25 +98,9 @@ class PublicationService(BaseService):
         )
 
 
-class PublicationWebAddressService(BaseService):
-    def __init__(self):
-        super().__init__(
-            table_name="people.publication_web_addresses",
-            model=people_models.PublicationWebAddress,
-        )
-
-
 class PatentService(BaseService):
     def __init__(self):
         super().__init__(table_name="people.patents", model=people_models.Patent)
-
-
-class PatentWebAddressService(BaseService):
-    def __init__(self):
-        super().__init__(
-            table_name="people.patent_web_addresses",
-            model=people_models.PatentWebAddress,
-        )
 
 
 class AwardService(BaseService):

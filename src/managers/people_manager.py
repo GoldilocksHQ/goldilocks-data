@@ -29,23 +29,10 @@ class PeopleManager(BaseManager):
         self.job_function_service = people_services.JobFunctionService()
         self.job_seniority_service = people_services.JobSeniorityService()
         self.education_service = people_services.EducationService()
-        self.education_web_address_service = (
-            people_services.EducationWebAddressService()
-        )
         self.certification_service = people_services.CertificationService()
-        self.certification_web_address_service = (
-            people_services.CertificationWebAddressService()
-        )
         self.membership_service = people_services.MembershipService()
-        self.membership_web_address_service = (
-            people_services.MembershipWebAddressService()
-        )
         self.publication_service = people_services.PublicationService()
-        self.publication_web_address_service = (
-            people_services.PublicationWebAddressService()
-        )
         self.patent_service = people_services.PatentService()
-        self.patent_web_address_service = people_services.PatentWebAddressService()
         self.award_service = people_services.AwardService()
 
     def _to_date(self, date_str: str) -> Optional[date]:
@@ -268,9 +255,9 @@ class PeopleManager(BaseManager):
         # Process Educations
         if "educations" in resume_data:
             for edu_data in resume_data.get("educations", []):
-                web_address_url = edu_data.pop(
+                web_address_data = edu_data.pop(
                     "educational_establishment_web_address", {}
-                ).get("url")
+                )
                 edu_model = people_models.Education(
                     people_id=people_id,
                     educational_establishment=edu_data.get("educational_establishment"),
@@ -279,18 +266,16 @@ class PeopleManager(BaseManager):
                     start_date=self._to_date(edu_data.get("start_date")),
                     end_date=self._to_date(edu_data.get("end_date")),
                     priority=edu_data.get("priority"),
+                    web_address_url=web_address_data.get("url"),
+                    web_address_rank=web_address_data.get("rank"),
                 )
-                created_edu = self.education_service.create(edu_model)
-                if created_edu and created_edu.id and web_address_url:
-                    edu_addr = people_models.EducationWebAddress(
-                        education_id=created_edu.id, url=web_address_url
-                    )
-                    self.education_web_address_service.create(edu_addr)
+                self.education_service.create(edu_model)
 
         # Process Certifications
         if "certifications" in resume_data:
             certifications_data = resume_data.get("certifications", [])
             for cert_data in certifications_data:
+                web_address_data = cert_data.pop("web_address", {})
                 cert_payload = {
                     "people_id": people_id,
                     "name": cert_data.get("name"),
@@ -299,6 +284,8 @@ class PeopleManager(BaseManager):
                     "end_date": cert_data.get("end_date"),
                     "authority": cert_data.get("authority"),
                     "raw_name": cert_data.get("raw_name"),
+                    "web_address_url": web_address_data.get("url"),
+                    "web_address_rank": web_address_data.get("rank"),
                 }
                 cert = people_models.Certification(**cert_payload)
                 self.certification_service.create(cert)
@@ -307,7 +294,7 @@ class PeopleManager(BaseManager):
         if "memberships" in resume_data:
             memberships_data = resume_data.get("memberships", [])
             for mem_data in memberships_data:
-                web_address_url = mem_data.pop("web_address", {}).get("url")
+                web_address_data = mem_data.pop("web_address", {})
                 mem_model = people_models.Membership(
                     people_id=people_id,
                     title=mem_data.get("title"),
@@ -318,18 +305,16 @@ class PeopleManager(BaseManager):
                     end_date=mem_data.get("end_date"),
                     location=mem_data.get("location"),
                     priority=mem_data.get("priority"),
+                    web_address_url=web_address_data.get("url"),
+                    web_address_rank=web_address_data.get("rank"),
                 )
-                created_mem = self.membership_service.create(mem_model)
-                if created_mem and created_mem.id and web_address_url:
-                    mem_addr = people_models.MembershipWebAddress(
-                        membership_id=created_mem.id, url=web_address_url
-                    )
-                    self.membership_web_address_service.create(mem_addr)
+                self.membership_service.create(mem_model)
 
         # Process Publications
         if "publications" in resume_data:
             publications_data = resume_data.get("publications", [])
             for pub_data in publications_data:
+                web_address_data = pub_data.pop("web_address", {})
                 pub_payload = {
                     "people_id": people_id,
                     "name": pub_data.get("name"),
@@ -337,6 +322,8 @@ class PeopleManager(BaseManager):
                     "description": pub_data.get("description"),
                     "publisher": pub_data.get("publisher"),
                     "url": pub_data.get("url"),
+                    "web_address_url": web_address_data.get("url"),
+                    "web_address_rank": web_address_data.get("rank"),
                 }
                 pub = people_models.Publication(**pub_payload)
                 self.publication_service.create(pub)
@@ -344,7 +331,7 @@ class PeopleManager(BaseManager):
         # Process Patents
         if "patents" in resume_data:
             for pat_data in resume_data.get("patents", []):
-                web_address_url = pat_data.pop("web_address", {}).get("url")
+                web_address_data = pat_data.pop("web_address", {})
                 pat_model = people_models.Patent(
                     people_id=people_id,
                     name=pat_data.get("name"),
@@ -353,13 +340,10 @@ class PeopleManager(BaseManager):
                     start_date=self._to_date(pat_data.get("start_date")),
                     end_date=self._to_date(pat_data.get("end_date")),
                     priority=pat_data.get("priority"),
+                    web_address_url=web_address_data.get("url"),
+                    web_address_rank=web_address_data.get("rank"),
                 )
-                created_pat = self.patent_service.create(pat_model)
-                if created_pat and created_pat.id and web_address_url:
-                    pat_addr = people_models.PatentWebAddress(
-                        patent_id=created_pat.id, url=web_address_url
-                    )
-                    self.patent_web_address_service.create(pat_addr)
+                self.patent_service.create(pat_model)
 
         # Process Awards
         if "awards" in resume_data:

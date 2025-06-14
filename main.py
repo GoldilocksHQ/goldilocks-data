@@ -13,7 +13,7 @@ def main():
     logger.info("Starting data processing pipeline...")
 
     # Load example data
-    file_path = "data_schema/example/search_profile_response_full_eg2.json"
+    file_path = "data_schema/example/search_profile_response_full_eg3.json"
     try:
         with open(file_path, "r") as f:
             example_data = json.load(f)

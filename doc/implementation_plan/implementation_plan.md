@@ -1,587 +1,96 @@
-# Implementation Plan for Supabase Data Integration
+---
+title: Implementation Plan - Record Update Strategy
+created_at: 2025-06-14
+updated_at: 2025-06-14
+status: Withhold
+---
 
-Created: 2025-06-13
-Last Updated: 2025-06-13
+# Implementation Plan: Record Update Strategy
 
-## Legend
-- 🔴 Not Started
-- 🟡 In Progress
-- 🟢 Completed
-- ⚠️ Blocked
-- 🔄 In Review
+## 1. Context
 
-## Project Directory Structure
-```
-goldilocks-data/
-├── .env.example                 # Example environment variables
-├── .gitignore                   # Git ignore file
-├── README.md                    # Project documentation
-├── requirements.txt             # Python dependencies
-├── setup.py                     # Package setup file
-├── data_schema/                 # Schema definitions
-│   ├── example/                 # Example data for testing
-│   │   ├── search_profile_response_full_eg1.json
-│   │   └── search_profile_response_full_eg2.json
-│   └── search_profiles_response_full.json
-├── src/                         # Source code
-│   ├── models/                  # Pydantic models
-│   │   ├── base.py             # Base model classes
-│   │   ├── people/             # People schema models
-│   │   └── organisation/       # Organisation schema models
-│   ├── services/               # Database services
-│   │   ├── base.py            # Base service class
-│   │   ├── people/            # People schema services
-│   │   └── organisation/      # Organisation schema services
-│   ├── managers/              # Data managers
-│   │   ├── base.py           # Base manager class
-│   │   ├── people/           # People data managers
-│   │   └── organisation/     # Organisation data managers
-│   └── utils/                # Utility functions
-│       ├── config.py         # Configuration management
-│       ├── logging.py        # Logging setup
-│       └── validators.py     # Custom validators
-├── tests/                    # Test suite
-│   ├── conftest.py          # Test configuration
-│   ├── unit/               # Unit tests
-│   ├── integration/        # Integration tests
-│   └── e2e/               # End-to-end tests
-└── sql/                    # SQL files
-    └── table_creation_query/  # Table creation queries
-```
+The current data integration pipeline is designed to only **create** new records in the Supabase database. It does not account for scenarios where data for a given person or organisation already exists. This limitation prevents the system from processing updates, leading to data staleness and potential errors if the same data is processed multiple times.
 
-## Overview
-This implementation plan outlines the development of a service to update Supabase with data from the Neuron360 API response. The system will include data models, database services, and managers to handle the data transformation and persistence.
+The goal of this implementation is to introduce an **update-by-replacement** strategy. When processing a record (person or organisation) that already exists in the database (identified by its `neuron360` ID), the system will first **delete all** of its existing, related records before inserting the new version of the data. This ensures data consistency and that the database is an up-to-date reflection of the source.
 
-## Phase 1: Project Setup and Infrastructure 🔴
+### Legend for Task Status
+- `[ ]` - To Do
+- `[~]` - In Progress
+- `[x]` - Done
+- `[-]` - Blocked / Won't Do
 
-### 1.1 Project Structure Setup
-- [ ] Create project directory structure
-  - Create all directories as shown in the structure above
-  - Ensure proper Python package structure with `__init__.py` files
-  - Set up proper import paths
-- [ ] Set up virtual environment
-  - Create `.venv` directory
-  - Install Python 3.8+
-  - Set up pip and virtualenv
-- [ ] Initialize git repository
-  - Create `.gitignore` with Python-specific entries
-  - Initialize git repository
-  - Create initial commit
-- [ ] Create requirements.txt with dependencies
-  - List all required packages with versions
-  - Include development dependencies
-- [ ] Set up configuration management
-  - Use `.env` with all required variables
-  - Set up configuration loading
-- [ ] Create README.md with setup instructions
-  - Document setup steps
-  - Include environment setup
-  - Add usage examples
+## 2. Key Identifier Mappings
 
-### 1.2 Development Environment 🟢
-- [x] Set up local development environment
-  - Configure IDE settings
-  - Set up linting and formatting
-  - Configure pre-commit hooks
-- [x] Configure Supabase connection
-  - Set up connection parameters
-  - Test connection
-  - Implement connection pooling
-- [x] Set up environment variables
-  - Create development environment file
-  - Set up production environment template
-- [x] Create development configuration
-  - Set up logging configuration
-  - Configure error handling
-  - Set up debugging tools
-- [x] Set up logging infrastructure
-  - Configure log levels
-  - Set up log rotation
-  - Create log formatting
+The update logic will rely on the following external-to-internal ID mappings:
 
-## Phase 2: Data Models Development 🟢
+-   **People**: `people.identities` maps the external `neuron360_profile_id` to the internal `people_id` (UUID).
+-   **Organisations**: `organisation.identities` maps the external `neuron360_company_id` to the internal `organisation_id` (UUID).
+-   **Offices**: `organisation.offices` maps the external `neuron360_office_id` to the internal `office_id` (UUID).
 
-### 2.1 Base Models
-- [x] Create base model classes
-  - Implemented common fields (id, timestamps)
-  - Created base validation methods
-  - Set up model configuration
-- [x] Implement common model utilities
-  - Created serialization methods
-  - Implemented validation helpers
-  - Added custom field types
-- [x] Set up model validation
-  - Implemented field validators
-  - Created custom validation rules
-  - Set up error messages
-- [x] Create model serialization/deserialization
-  - Implemented JSON conversion
-  - Created database mapping
-  - Added custom serializers
+## 3. Implementation Phases
 
-### 2.2 People Schema Models
-Key files to read:
-- `data_schema/search_profiles_response_full.json`
-- `sql/table_creation_query/create_people_schema_identities_table.sql`
-- `sql/table_creation_query/create_people_schema_profiles_table.sql`
-- `sql/table_creation_query/create_people_schema_experience_table.sql`
-- `sql/table_creation_query/create_people_schema_resume_table.sql`
+The implementation is broken down into four phases: enhancing the service layer, adding update logic to the organisation manager, adding update logic to the people manager, and finally, testing.
 
-- [x] Create Identity model
-  - Mapped fields from identities table
-  - Implemented validation rules
-  - Added relationship fields
-- [x] Create Profile model
-  - Mapped fields from profiles table
-  - Implemented nested object handling
-  - Added validation rules
-- [x] Create Experience model
-  - Mapped fields from experiences table
-  - Handled nested job details
-  - Implemented date validation
-- [x] Create Education model
-  - Mapped fields from educations table
-  - Handled web address relationships
-  - Implemented date validation
-- [x] Create Certification model
-  - Mapped fields from certifications table
-  - Handled web address relationships
-  - Implemented date validation
-- [x] Create Membership model
-  - Mapped fields from memberships table
-  - Handled web address relationships
-  - Implemented date validation
-- [x] Create Publication model
-  - Mapped fields from publications table
-  - Handled web address relationships
-  - Implemented date validation
-- [x] Create Patent model
-  - Mapped fields from patents table
-  - Handled web address relationships
-  - Implemented date validation
-- [x] Create Award model
-  - Mapped fields from awards table
-  - Implemented date validation
-  - Added relationship fields
+### Phase 1: Service Layer Enhancements
 
-### 2.3 Organisation Schema Models
-Key files to read:
-- `sql/table_creation_query/create_organisation_schema_identities_table.sql`
-- `sql/table_creation_query/create_organisation_schema_profile_table.sql`
-- `sql/table_creation_query/create_organisation_schema_offices_table.sql`
+This phase focuses on adding the necessary deletion methods to the service layer. Since the database schema does not enforce cascading deletes (`ON DELETE CASCADE`), the application must be responsible for orchestrating the deletion of records in the correct order to avoid foreign key constraint violations.
 
-- [x] Create Organisation Identity model
-  - Mapped fields from organisation identities table
-  - Implemented validation rules
-  - Added relationship fields
-- [x] Create Organisation Profile model
-  - Mapped fields from organisation profiles table
-  - Handled nested objects
-  - Implemented validation rules
-- [x] Create Office model
-  - Mapped fields from offices table
-  - Handled address relationships
-  - Implemented validation rules
-- [x] Create Office Address model
-  - Mapped fields from office addresses table
-  - Implemented geolocation validation
-  - Added relationship fields
-- [x] Create Office Industry model
-  - Mapped fields from office industries table
-  - Implemented validation rules
-  - Added relationship fields
+**Tasks:**
 
-## Phase 3: Database Service Development 🟢
+-   `[ ]` **Analyse Foreign Key Dependencies**: Review the `people_and_org_data_schema.txt` to map out the exact deletion order required for each schema.
+-   `[ ]` **Create Deletion Methods in `people_services.py`**:
+    -   `[ ]` Implement `delete_by_people_id` in services for tables that have a direct foreign key to `people.identities` (e.g., `ProfileService`, `ExperienceService`, `EducationService`).
+    -   `[ ]` Implement `delete_by_experience_id` for child tables of `experiences` (e.g., `JobTitleDetailService`, `JobFunctionService`).
+    -   `[ ]` Implement similar deletion methods for children of `educations`, `certifications`, etc.
+-   `[ ]` **Create Deletion Methods in `organisation_services.py`**:
+    -   `[ ]` Implement `delete_by_organisation_id` for tables with a foreign key to `organisation.identities` (e.g., `WebAddressService`, `EmployeeService`, `OfficeService`).
+    -   `[ ]` Implement `delete_by_office_id` for child tables of `offices` (e.g., `OfficeAddressService`, `OfficeIndustryService`).
+-   `[ ]` **Update `BaseService`**:
+    -   `[ ]` Add a generic `delete_by_column` method to `BaseService` to reduce code duplication in the specific service files. The method signature should be `delete_by_column(self, column_name: str, value: Any) -> bool`.
 
-### 3.1 Base Database Service
-- [x] Create database connection manager
-  - Implemented connection pooling
-  - Handled connection lifecycle
-  - Added retry logic
-- [x] Implement connection pooling
-  - Configured pool size
-  - Handled connection timeouts
-  - Implemented connection cleanup
-- [x] Create base CRUD operations
-  - Implemented create operations
-  - Added read operations
-  - Created update operations
-  - Added delete operations
-- [x] Implement transaction management
-  - Handled transaction lifecycle
-  - Added rollback support
-  - Implemented savepoints
-- [x] Create error handling
-  - Implemented custom exceptions
-  - Added error logging
-  - Created error recovery
+### Phase 2: Manager Layer - Organisation Update Logic
 
-### 3.2 People Schema Services
-- [x] Create Identity service
-  - Implemented CRUD operations
-  - Added relationship handling
-  - Created search methods
-- [x] Create Profile service
-  - Implemented CRUD operations
-  - Handled nested objects
-  - Added search functionality
-- [x] Create Experience service
-  - Implemented CRUD operations
-  - Handled date ranges
-  - Added relationship management
-- [x] Create Education service
-  - Implemented CRUD operations
-  - Handled web addresses
-  - Added date validation
-- [x] Create Certification service
-  - Implemented CRUD operations
-  - Handled web addresses
-  - Added date validation
-- [x] Create Membership service
-  - Implemented CRUD operations
-  - Handled web addresses
-  - Added date validation
-- [x] Create Publication service
-  - Implemented CRUD operations
-  - Handled web addresses
-  - Added date validation
-- [x] Create Patent service
-  - Implemented CRUD operations
-  - Handled web addresses
-  - Added date validation
-- [x] Create Award service
-  - Implemented CRUD operations
-  - Added date validation
-  - Created search methods
+With the service layer updated, this phase implements the core update logic in the `OrganisationManager`.
 
-### 3.3 Organisation Schema Services
-- [x] Create Organisation Identity service
-  - Implemented CRUD operations
-  - Added relationship handling
-  - Created search methods
-- [x] Create Organisation Profile service
-  - Implemented CRUD operations
-  - Handled nested objects
-  - Added search functionality
-- [x] Create Office service
-  - Implemented CRUD operations
-  - Handled address relationships
-  - Added search methods
-- [x] Create Office Address service
-  - Implemented CRUD operations
-  - Handled geolocation
-  - Added search functionality
-- [x] Create Office Industry service
-  - Implemented CRUD operations
-  - Handled relationships
-  - Added search methods
+**Tasks:**
 
-## Phase 4: Data Manager Development 🟢
+-   `[ ]` **Modify `OrganisationManager.process_organisation_data`**:
+    -   `[ ]` Use the existing `identity_service.get_by_neuron_id()` to check if an organisation with the given `neuron360_company_id` exists.
+    -   `[ ]` If it exists:
+        -   `[ ]` Log that an existing organisation is being updated.
+        -   `[ ]` Get the `organisation_id` from the existing identity.
+        -   `[ ]` Create a new private method `_delete_organisation_data(self, organisation_id: uuid.UUID)`.
+        -   `[ ]` Within `_delete_organisation_data`, call all the necessary `delete_by_organisation_id` and `delete_by_office_id` service methods in the correct dependency order. This includes deleting all offices associated with the organisation.
+        -   `[ ]` Finally, delete the `organisation.identities` record itself.
+    -   `[ ]` Proceed with the existing logic to create the new organisation records from scratch.
+-   `[ ]` **Refactor `OrganisationManager._process_office`**: The logic for deleting an organisation should also handle its offices. However, if office data can be updated independently, a similar check-and-delete logic using `neuron360_office_id` might be needed here. For now, we assume deleting the parent organisation is sufficient.
 
-### 4.1 Base Manager
-- [x] Create base manager class
-  - Implemented common methods
-  - Added error handling
-  - Created logging
-- [x] Implement data validation
-  - Added input validation
-  - Created output validation
-  - Implemented custom validators
-- [x] Create error handling
-  - Implemented custom exceptions
-  - Added error logging
-  - Created error recovery
-- [x] Implement logging
-  - Set up log levels
-  - Added context logging
-  - Created log rotation
-- [x] Create data transformation utilities
-  - Implemented data mapping
-  - Added format conversion
-  - Created validation helpers
+### Phase 3: Manager Layer - People Update Logic
 
-### 4.2 People Data Manager
-- [x] Create Identity manager
-  - Implemented data transformation
-  - Added validation rules
-  - Created error handling
-- [x] Create Profile manager
-  - Handled nested objects
-  - Implemented validation
-  - Added error handling
-- [x] Create Experience manager
-  - Handled date ranges
-  - Implemented validation
-  - Added error handling
-- [x] Create Education manager
-  - Handled web addresses
-  - Implemented validation
-  - Added error handling
-- [x] Create Certification manager
-  - Handled web addresses
-  - Implemented validation
-  - Added error handling
-- [x] Create Membership manager
-  - Handled web addresses
-  - Implemented validation
-  - Added error handling
-- [x] Create Publication manager
-  - Handled web addresses
-  - Implemented validation
-  - Added error handling
-- [x] Create Patent manager
-  - Handled web addresses
-  - Implemented validation
-  - Added error handling
-- [x] Create Award manager
-  - Implemented validation
-  - Added error handling
-  - Created data transformation
+This phase mirrors Phase 2, applying the update logic to the `PeopleManager`.
 
-### 4.3 Organisation Data Manager
-- [x] Create Organisation Identity manager
-  - Implemented data transformation
-  - Added validation rules
-  - Created error handling
-- [x] Create Organisation Profile manager
-  - Handled nested objects
-  - Implemented validation
-  - Added error handling
-- [x] Create Office manager
-  - Handled address relationships
-  - Implemented validation
-  - Added error handling
-- [x] Create Office Address manager
-  - Handled geolocation
-  - Implemented validation
-  - Added error handling
-- [x] Create Office Industry manager
-  - Handled relationships
-  - Implemented validation
-  - Added error handling
+**Tasks:**
 
-## Phase 5: Integration and Testing 🟢
+-   `[ ]` **Modify `PeopleManager.process_person_data`**:
+    -   `[ ]` At the beginning of the method, use `identity_service.get_by_neuron_id()` to check for an existing person via `neuron360_profile_id`.
+    -   `[ ]` If an identity is found:
+        -   `[ ]` Log that an existing person's record is being updated.
+        -   `[ ]` Get the `people_id`.
+        -   `[ ]` Create a new private method `_delete_person_data(self, people_id: uuid.UUID)`.
+        -   `[ ]` This method will be responsible for calling all the `delete_by...` methods in the `people_services` in the correct order to remove all of a person's data (profile, experiences, education, etc.).
+        -   `[ ]` Finally, delete the `people.identities` record.
+    -   `[ ]` Proceed with the existing record creation logic. **Note**: The call to `org_manager.process_organisation_data` should remain, as it has its own idempotency check from Phase 2.
 
-### 5.1 Unit Tests
-- [x] Create test infrastructure
-  - Set up pytest
-  - Create test fixtures
-  - Add test utilities
-- [x] Write model tests
-  - Test validation rules
-  - Test serialization
-  - Test relationships
-- [x] Write service tests
-  - Test CRUD operations
-  - Test error handling
-  - Test transactions
-- [x] Write manager tests
-  - Test data transformation
-  - Test validation
-  - Test error handling
-- [x] Create test fixtures
-  - Add sample data
-  - Create mock objects
-  - Set up test database
+### Phase 4: Testing and Validation
 
-### 5.2 Integration Tests
-- [x] Create integration test suite
-  - Set up test environment
-  - Create test database
-  - Add test utilities
-- [x] Test data flow
-  - Test model to service
-  - Test service to database
-  - Test manager to service
-- [x] Test error handling
-  - Test validation errors
-  - Test database errors
-  - Test system errors
-- [x] Test performance
-  - Test response times
-  - Test memory usage
-  - Test connection pooling
-- [x] Test concurrent operations
-  - Test parallel requests
-  - Test transaction isolation
-  - Test connection handling
+This final phase ensures the new logic is working correctly and hasn't introduced regressions.
 
-### 5.3 End-to-End Tests
-- [x] Create E2E test scenarios
-  - Set up test environment
-  - Create test data
-  - Add test utilities
-- [x] Test complete data pipeline
-  - Test API to database
-  - Test data transformation
-  - Test error handling
-- [x] Test error recovery
-  - Test system failures
-  - Test data corruption
-  - Test recovery procedures
-- [x] Test data consistency
-  - Test relationships
-  - Test transactions
-  - Test data integrity
+**Tasks:**
 
-## Phase 6: Documentation and Deployment 🟢
-
-### 6.1 Documentation
-- [x] Create API documentation
-  - Document models in README
-  - Document services in README
-  - Document managers in README
-- [x] Write setup guide
-  - Document installation in README
-  - Document configuration in README
-  - Document usage in README
-- [x] Create usage examples
-  - Add code examples in README and `main.py`
-  - Create tutorials (covered by README)
-  - Add best practices (covered by README)
-- [x] Document error handling
-  - Document errors (high-level in README)
-  - Add troubleshooting (high-level in README)
-  - Create recovery guide (future work)
-- [x] Create troubleshooting guide
-  - Add common issues (covered by README)
-  - Create solutions (covered by README)
-  - Add debugging tips (covered by README)
-
-### 6.2 Deployment
-- [x] Create deployment scripts (future work)
-  - Add setup scripts
-  - Create update scripts
-  - Add rollback scripts
-- [x] Set up CI/CD pipeline (future work)
-  - Configure build process
-  - Set up testing
-  - Add deployment
-- [x] Create monitoring (future work)
-  - Set up logging
-  - Add metrics
-  - Create alerts
-- [x] Set up alerts (future work)
-  - Configure notifications
-  - Add error alerts
-  - Create performance alerts
-- [x] Create backup strategy (future work)
-  - Set up backups
-  - Add recovery
-  - Create retention policy
-
-## Technical Details
-
-### Data Flow
-1. API Response → Data Models
-   - Parse JSON response
-   - Validate data structure
-   - Transform to models
-2. Data Models → Database Services
-   - Validate model data
-   - Transform to database format
-   - Execute database operations
-3. Database Services → Supabase Tables
-   - Execute SQL queries
-   - Handle transactions
-   - Manage relationships
-
-### Key Components
-1. **Models**: Pydantic models for data validation and transformation
-   - Base model with common fields
-   - Schema-specific models
-   - Relationship models
-2. **Services**: Database operations and business logic
-   - Connection management
-   - CRUD operations
-   - Transaction handling
-3. **Managers**: Data transformation and orchestration
-   - Data validation
-   - Error handling
-   - Business logic
-4. **Utilities**: Common functionality and helpers
-   - Configuration
-   - Logging
-   - Validation
-
-### Error Handling Strategy
-1. Validation errors at model level
-   - Field validation
-   - Type checking
-   - Custom validation
-2. Database errors at service level
-   - Connection errors
-   - Query errors
-   - Transaction errors
-3. Business logic errors at manager level
-   - Data validation
-   - Business rules
-   - Process errors
-4. System errors at application level
-   - Configuration errors
-   - Resource errors
-   - System failures
-
-### Performance Considerations
-1. Connection pooling
-   - Pool size configuration
-   - Connection reuse
-   - Timeout handling
-2. Batch operations
-   - Bulk inserts
-   - Batch updates
-   - Batch deletes
-3. Caching strategy
-   - Query caching
-   - Result caching
-   - Cache invalidation
-4. Index optimization
-   - Primary keys
-   - Foreign keys
-   - Search indexes
-5. Query optimization
-   - Query planning
-   - Query execution
-   - Result handling
-
-### Security Considerations
-1. Environment variable management
-   - Secure storage
-   - Access control
-   - Value encryption
-2. API key security
-   - Key rotation
-   - Access control
-   - Usage monitoring
-3. Database credentials
-   - Secure storage
-   - Access control
-   - Usage monitoring
-4. Data encryption
-   - At rest
-   - In transit
-   - In use
-5. Access control
-   - User authentication
-   - Role management
-   - Permission control
-
-## Dependencies
-- Python 3.8+
-- Pydantic
-- SQLAlchemy
-- Supabase-py
-- pytest
-- python-dotenv
-- logging
-- typing
-
-## Timeline
-- Phase 1: 1 week
-- Phase 2: 2 weeks
-- Phase 3: 2 weeks
-- Phase 4: 2 weeks
-- Phase 5: 2 weeks
-- Phase 6: 1 week
-
-Total estimated time: 10 weeks
+-   `[ ]` **Unit Tests**:
+    -   `[ ]` Write unit tests for the new `delete_by_...` methods in the service layers.
+-   `[ ]` **Integration Tests**:
+    -   `[ ]` Create a new test file `tests/integration/test_update_logic.py`.
+    -   `[ ]` **Test Case 1**: Process a JSON file, then process it again. Assert that the final state of the database is correct and that no duplicate records exist.
+    -   `[ ]` **Test Case 2**: Process a file. Manually alter a value in a table (e.g., a person's name). Process the original file again. Assert that the altered value has been reverted to its original state.
+    -   `[ ]` **Test Case 3**: Verify that processing a person with an existing organisation does not delete and re-create the organisation if the organisation data is unchanged (leveraging the check in `OrganisationManager`).

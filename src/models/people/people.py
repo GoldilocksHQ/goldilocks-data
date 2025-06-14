@@ -1,7 +1,7 @@
 import uuid
 from typing import List, Optional
 from datetime import datetime, date
-from pydantic import BaseModel, Field
+from pydantic import Field
 from src.models.base_model import CustomBaseModel
 
 # PEOPLE SCHEMA
@@ -169,14 +169,8 @@ class Education(CustomBaseModel):
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     priority: Optional[int] = None
-
-
-# education_web_addresses table
-class EducationWebAddress(CustomBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    education_id: uuid.UUID
-    url: Optional[str] = None
-    rank: Optional[int] = None
+    web_address_url: Optional[str] = None
+    web_address_rank: Optional[int] = None
 
 
 # certifications table
@@ -191,14 +185,8 @@ class Certification(CustomBaseModel):
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     priority: Optional[int] = None
-
-
-# certification_web_addresses table
-class CertificationWebAddress(CustomBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    certification_id: uuid.UUID
-    url: Optional[str] = None
-    rank: Optional[int] = None
+    web_address_url: Optional[str] = None
+    web_address_rank: Optional[int] = None
 
 
 # memberships table
@@ -213,14 +201,8 @@ class Membership(CustomBaseModel):
     end_date: Optional[str] = None
     location: Optional[str] = None
     priority: Optional[int] = None
-
-
-# membership_web_addresses table
-class MembershipWebAddress(CustomBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    membership_id: uuid.UUID
-    url: Optional[str] = None
-    rank: Optional[int] = None
+    web_address_url: Optional[str] = None
+    web_address_rank: Optional[int] = None
 
 
 # publications table
@@ -233,14 +215,8 @@ class Publication(CustomBaseModel):
     issue: Optional[str] = None
     date: Optional[str] = None
     priority: Optional[int] = None
-
-
-# publication_web_addresses table
-class PublicationWebAddress(CustomBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    publication_id: uuid.UUID
-    url: Optional[str] = None
-    rank: Optional[int] = None
+    web_address_url: Optional[str] = None
+    web_address_rank: Optional[int] = None
 
 
 # patents table
@@ -253,14 +229,8 @@ class Patent(CustomBaseModel):
     start_date: Optional[date] = None
     end_date: Optional[date] = None
     priority: Optional[int] = None
-
-
-# patent_web_addresses table
-class PatentWebAddress(CustomBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    patent_id: uuid.UUID
-    url: Optional[str] = None
-    rank: Optional[int] = None
+    web_address_url: Optional[str] = None
+    web_address_rank: Optional[int] = None
 
 
 # awards table

@@ -110,7 +110,7 @@ python main.py
 ```
 
 This will:
-1.  Load the example data from `data_schema/example/search_profile_response_full_eg2.json`.
+1.  Load the example data from `data_schema/example/search_profile_response_full_eg1.json`.
 2.  Initialize the `PeopleManager` and `OrganisationManager`.
 3.  Process the data, validate it, and persist it to your Supabase instance.
 
