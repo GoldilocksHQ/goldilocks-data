@@ -44,7 +44,18 @@ The hierarchy is as follows:
     -   Option 1: `is one of ["Profile Has Phone", "Profile Has Address", "Profile Has Email"]`
     -   Option 2: `is not one of ["Profile Has Phone", "Profile Has Address", "Profile Has Email"]`
 
-## 3. Execution Flow
+## 3. Concurrent Execution & Command-Line Arguments
+
+The script is designed to significantly improve performance by executing the data download process concurrently. It uses a producer-consumer model:
+-   A **single main thread** (the "producer") explores the parameter hierarchy to find "workable" queries.
+-   A **pool of worker threads** (the "consumers") executes the `mass_request_pages` function for each workable query, downloading the data in parallel.
+
+This behavior can be configured with the following command-line arguments:
+
+-   `--threads`: (Optional) Specifies the number of concurrent worker threads to use for downloading data. The default value is `5`. Increasing this number can improve download speed, but may be limited by network bandwidth and API rate limits.
+-   `--dry-run`: (Optional) If this flag is present, the script will perform the entire parameter exploration process but will not execute the mass request downloads. This is useful for validating the query logic without making a large number of API calls.
+
+## 4. Execution Flow
 
 The script will operate using a recursive or deeply nested loop structure that follows the parameter hierarchy.
 
@@ -68,11 +79,11 @@ The script will operate using a recursive or deeply nested loop structure that f
 
 4.  **Bottom of Hierarchy**: If the script reaches the final layer (Layer H) and the total results are still >= 10,000, it will proceed with the **Mass Request Mode** for that query, accepting that it will only be able to retrieve the first 10,000 of the available profiles.
 
-## 4. Rate Limiting
+## 5. Rate Limiting
 
-To avoid overwhelming the Neuron360 API, a rate limit will be strictly enforced. The script will ensure that no more than 1,000 requests are sent per minute. This will be achieved by introducing a small delay (e.g., 60ms) after each API call.
+To avoid overwhelming the Neuron360 API, a rate limit will be strictly enforced. The script will ensure that no more than 1,000 requests are sent per minute. This will be achieved by introducing a small delay (e.g., 70ms) after each API call.
 
-## 5. Progress Tracking
+## 6. Progress Tracking
 
 A CSV file (`data/request_tracker.csv`) will be used to log the state of the extraction process. This allows for monitoring and enables the script to be stopped and resumed without losing progress.
 
@@ -85,7 +96,7 @@ The CSV will have the following columns:
 -   `last_completed_page`: The last page number successfully downloaded. For completed queries, this will equal the total number of pages.
 -   `error_message`: Any error message encountered during processing.
 
-## 6. Skills Enum Enhancement
+## 7. Skills Enum Enhancement
 
 The `src/enums/neuron360/skills.py` file will be updated to include the complete and correct taxonomy of skills as defined by the Neuron360 documentation. This includes:
 -   A comprehensive `SkillCategory` enum.

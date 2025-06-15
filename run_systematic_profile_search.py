@@ -3,6 +3,7 @@ import time
 import json
 from math import ceil
 import argparse
+import concurrent.futures
 
 from src.managers.profile_search_manager import ProfileSearchManager
 from src.utils.progress_tracker import ProgressTracker
@@ -30,7 +31,13 @@ IS_DRY_RUN = False
 
 
 def mass_request_pages(params: dict, total_profiles: int):
-    """Fetches all pages for a workable parameter set."""
+    """
+    Fetches all pages for a workable parameter set.
+    This function is executed by a worker thread.
+    """
+    # Each thread needs its own manager instance for thread safety
+    manager = ProfileSearchManager(output_dir=OUTPUT_DIR)
+
     last_page = min(ceil(total_profiles / PAGE_SIZE), 100)
     progress = TRACKER.get_progress(params)
     start_page = int(progress.get("last_completed_page", 0)) + 1
@@ -44,11 +51,23 @@ def mass_request_pages(params: dict, total_profiles: int):
 
     for page_num in range(start_page, last_page + 1):
         try:
+            current_page_size = PAGE_SIZE
+            if page_num == last_page:
+                # Calculate the exact size for the last page to avoid over-fetching
+                last_page_size = total_profiles % PAGE_SIZE
+                if last_page_size == 0:
+                    last_page_size = PAGE_SIZE
+                current_page_size = last_page_size
+
             time.sleep(REQUEST_DELAY_SECONDS)
             logging.debug(
-                f"Requesting page {page_num}/{last_page} for params: {params}"
+                f"Requesting page {page_num}/{last_page} with size {current_page_size} for params: {params}"
             )
-            MANAGER.search(page_number=page_num, page_size=PAGE_SIZE, parameters=params)
+            manager.search(
+                page_number=page_num,
+                page_size=current_page_size,
+                parameters=params,
+            )
             TRACKER.update_page_progress(params, page_num)
         except Exception as e:
             logging.error(
@@ -65,7 +84,7 @@ def mass_request_pages(params: dict, total_profiles: int):
         logging.info(f"Successfully completed all pages for parameter set: {params}")
 
 
-def process_layer(current_params: dict, layer_index: int):
+def process_layer(current_params: dict, layer_index: int, executor):
     """
     Recursively processes each layer of the parameter hierarchy.
     """
@@ -97,13 +116,15 @@ def process_layer(current_params: dict, layer_index: int):
                 continue
             elif status == "IN_PROGRESS":
                 logging.info("Resuming IN_PROGRESS parameter set.")
-                mass_request_pages(new_params, int(progress["total_profiles"]))
+                executor.submit(
+                    mass_request_pages, new_params, int(progress["total_profiles"])
+                )
                 continue
-            elif progress.get("is_workable") == "False":
+            elif not progress.get("is_workable"):
                 logging.info(
                     "Query previously deemed not workable. Descending to next layer."
                 )
-                process_layer(new_params, layer_index + 1)
+                process_layer(new_params, layer_index + 1, executor)
                 continue
 
         # Perform the initial check request
@@ -111,34 +132,57 @@ def process_layer(current_params: dict, layer_index: int):
             time.sleep(REQUEST_DELAY_SECONDS)
             check_response = MANAGER.search(page_size=1, parameters=new_params)
             total_profiles = MANAGER.get_total_profiles(check_response)
-            is_workable = total_profiles < MAX_PROFILES_PER_QUERY
 
-            TRACKER.log_check(new_params, total_profiles, is_workable)
-            logging.info(
-                f"Check result: {total_profiles} profiles. Workable: {is_workable}"
-            )
+            logging.info(f"Check result: {total_profiles} profiles for {new_params}")
 
-            if is_workable:
+            # Case 1: Workable number of profiles
+            if 0 < total_profiles < MAX_PROFILES_PER_QUERY:
+                TRACKER.log_check(new_params, total_profiles, is_workable=True)
+                logging.info("Query is workable. Submitting for mass request.")
                 if IS_DRY_RUN:
                     logging.info(
                         f"[DRY RUN] Would execute mass request for: {new_params}"
                     )
                 else:
-                    mass_request_pages(new_params, total_profiles)
-            elif layer_index == len(config.PARAMETER_HIERARCHY) - 1:
-                logging.warning(
-                    "Query not workable at the last layer. Proceeding with mass "
-                    f"request for first {MAX_PROFILES_PER_QUERY} results."
+                    executor.submit(mass_request_pages, new_params, total_profiles)
+
+            # Case 2: Zero profiles found
+            elif total_profiles == 0:
+                TRACKER.log_check(
+                    new_params,
+                    total_profiles,
+                    is_workable=False,
+                    status="SKIPPED_NO_RESULT",
                 )
-                if IS_DRY_RUN:
-                    logging.info(
-                        f"[DRY RUN] Would execute mass request for: {new_params}"
+                logging.info("Query returned 0 results. Pruning this branch.")
+                continue
+
+            # Case 3: Too many profiles (or exactly 10k)
+            else:  # total_profiles >= MAX_PROFILES_PER_QUERY
+                is_last_layer = layer_index == len(config.PARAMETER_HIERARCHY) - 1
+                TRACKER.log_check(
+                    new_params,
+                    total_profiles,
+                    is_workable=False,
+                    status="SKIPPED_TOO_LARGE",
+                )
+
+                if is_last_layer:
+                    logging.warning(
+                        "Query too large at the last layer. Proceeding with mass "
+                        f"request for first {MAX_PROFILES_PER_QUERY} results."
                     )
+                    if IS_DRY_RUN:
+                        logging.info(
+                            f"[DRY RUN] Would execute mass request for: {new_params}"
+                        )
+                    else:
+                        executor.submit(
+                            mass_request_pages, new_params, MAX_PROFILES_PER_QUERY
+                        )
                 else:
-                    mass_request_pages(new_params, total_profiles)
-            else:
-                logging.info("Query not workable. Descending to next layer.")
-                process_layer(new_params, layer_index + 1)
+                    logging.info("Query too large. Descending to next layer.")
+                    process_layer(new_params, layer_index + 1, executor)
 
         except Exception as e:
             logging.error(
@@ -152,12 +196,12 @@ def process_layer(current_params: dict, layer_index: int):
             continue
 
 
-def main(is_dry_run: bool):
+def main(args):
     """
     Main function to orchestrate the systematic data extraction.
     """
     global IS_DRY_RUN
-    IS_DRY_RUN = is_dry_run
+    IS_DRY_RUN = args.dry_run
 
     logging.info("--- Starting Systematic Profile Search (Top-Down) ---")
     if IS_DRY_RUN:
@@ -167,7 +211,13 @@ def main(is_dry_run: bool):
 
     # Start the recursive process from the top layer (index 0)
     base_params = {"countries": [config.STATIC_COUNTRY]}
-    process_layer(base_params, layer_index=0)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=args.threads) as executor:
+        process_layer(base_params, layer_index=0, executor=executor)
+        logging.info(
+            "All parameter combinations have been explored. Waiting for running downloads to complete..."
+        )
+        # The 'with' block will implicitly call executor.shutdown(wait=True)
 
     logging.info("--- Systematic Profile Search Finished ---")
 
@@ -184,6 +234,12 @@ if __name__ == "__main__":
             "perform mass page requests."
         ),
     )
+    parser.add_argument(
+        "--threads",
+        type=int,
+        default=5,
+        help="Number of concurrent worker threads for mass requesting data.",
+    )
     args = parser.parse_args()
 
-    main(is_dry_run=args.dry_run)
+    main(args)

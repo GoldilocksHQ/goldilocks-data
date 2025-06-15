@@ -173,26 +173,45 @@ This phase will replace the current bottom-up parameter generation with a top-do
 
 This phase will refactor the script to perform the "mass request" portion of the data extraction concurrently using a pool of worker threads. This will significantly speed up the overall process by decoupling the discovery of workable queries from the time-consuming process of downloading all their pages.
 
--   `[ ]` **Enhance `ProgressTracker` for Thread Safety**:
+-   `[x]` **Enhance `ProgressTracker` for Thread Safety**:
     -   Modify `src/utils/progress_tracker.py`.
     -   Introduce a `threading.Lock` as an instance variable in the `__init__` method.
     -   Wrap all methods that perform file I/O (`_initialize_file`, `load_progress`, `_append_to_csv`, and `_rewrite_csv`) with this lock using a `with self.lock:` block. This is the most critical change to prevent data corruption from concurrent writes to the tracking CSV.
 
--   `[ ]` **Adapt `run_systematic_profile_search.py` for Concurrency**:
+-   `[x]` **Adapt `run_systematic_profile_search.py` for Concurrency**:
     -   Import the `concurrent.futures` module.
     -   Add a new command-line argument, `--threads`, with a default value of `5`. This will allow the user to control the number of concurrent worker threads.
     -   In the `main` function, initialize a `concurrent.futures.ThreadPoolExecutor` and manage it with a `with` statement.
     -   Pass the executor instance to the `process_layer` function.
 
--   `[ ]` **Refactor Core Execution Logic for Threading**:
+-   `[x]` **Refactor Core Execution Logic for Threading**:
     -   Modify the `process_layer` function to accept the `executor` as an argument. When it finds a workable query, it will submit the task to the pool: `executor.submit(mass_request_pages, new_params, total_profiles)`. The logic for resuming `IN_PROGRESS` jobs will be similarly updated.
     -   **Crucially, modify `mass_request_pages` to instantiate its own `ProfileSearchManager`**. This is essential for thread safety, as each thread needs its own `Neuron360Service` and `requests.Session`. The global `MANAGER` instance will only be used by the main thread for the initial, single-threaded "check" queries.
 
--   `[ ]` **Verify Component Thread Safety (Analysis Task)**:
+-   `[x]` **Verify Component Thread Safety (Analysis Task)**:
     -   **`Neuron360Service`**: Re-verify thread safety. (Analysis complete: The service is NOT thread-safe if a single instance is shared. The plan to instantiate a new `ProfileSearchManager` per thread resolves this by giving each thread its own service instance.)
     -   **`ProgressTracker`**: To be made thread-safe with a lock.
     -   **`failed_request_logger`**: Standard Python logger is thread-safe. No changes needed.
     -   This task is to ensure the implementation follows the analysis.
 
--   `[ ]` **Update Documentation**:
+-   `[x]` **Update Documentation**:
     -   Update the main `README.md` or `doc/systematic_data_extraction.md` to document the new `--threads` command-line argument.
+
+### Phase 8: Zero-Result Query Pruning
+
+This phase introduces a critical optimization to the recursive search logic. The objective is to prevent the script from making redundant API calls for parameter combinations that are guaranteed to yield no results, thereby improving efficiency and reducing unnecessary API load.
+
+-   `[x]` **Analyze and Contrast Logic**:
+    -   **Current Flaw**: The existing logic treats a query with 0 results as "not workable" and proceeds to recursively call the next layer of the hierarchy. This is inefficient as all subsequent, more granular queries are guaranteed to also have 0 results.
+    -   **Proposed Enhancement**: The new logic will identify a 0-result query as a "dead end". It will prune this entire search branch, immediately stopping recursion for that parameter set and continuing to the next sibling in the current layer.
+
+-   `[x]` **Refactor Core Decision Logic**:
+    -   Modify the `if/elif/else` block within the `process_layer` function of `run_systematic_profile_search.py`.
+    -   The logic will be restructured to explicitly handle three distinct cases based on the `total_profiles` returned by a check query:
+        1.  **Workable (`0 < total_profiles < 10,000`):** No change. Submit for mass download.
+        2.  **Zero Results (`total_profiles == 0`):** New logic. Log that this branch is being pruned. Do not recurse deeper. `continue` to the next parameter combination in the current loop.
+        3.  **Too Many Results (`total_profiles >= 10,000`):** No change. Recurse to the next layer (`process_layer(new_params, layer_index + 1)`) to add more filters.
+
+-   `[x]` **Validation**:
+    -   After implementation, run the script with `--dry-run`.
+    -   Monitor the logs to confirm that when a query returns `0` results, a "Skipping deeper layers" message (or similar) is printed, and no subsequent log messages for deeper layers of that branch appear. The script should instead proceed directly to the next parameter at the same layer.

@@ -39,14 +39,16 @@ class ProfileSearchManager:
         Returns:
             str: The path to the saved file.
         """
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S-%f")
 
         target_dir = self.response_dir
         if sub_dir_path:
             target_dir = os.path.join(self.response_dir, sub_dir_path)
             os.makedirs(target_dir, exist_ok=True)
 
-        file_path = os.path.join(target_dir, f"response_{timestamp}.json")
+        file_path = os.path.join(
+            target_dir, f"profile_search_response_{timestamp}.json"
+        )
         try:
             with open(file_path, "w", encoding="utf-8") as f:
                 json.dump(response, f, indent=4)
