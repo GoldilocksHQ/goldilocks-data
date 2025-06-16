@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from src.config.path_config import LOG_FILE_PATH
 
 # Load environment variables from .env file
 load_dotenv()
@@ -34,7 +35,7 @@ class Config:
 
     # Application
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-    LOG_FILE = os.getenv("LOG_FILE", "logs/goldilocks.log")
+    LOG_FILE = os.getenv("LOG_FILE", LOG_FILE_PATH)
     ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
     DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "t")
 

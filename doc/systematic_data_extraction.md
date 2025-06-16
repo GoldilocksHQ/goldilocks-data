@@ -1,7 +1,7 @@
 ---
 title: "Systematic Neuron360 Data Extraction"
 created_at: "2025-06-14"
-updated_at: "2025-06-14"
+updated_at: "2025-06-15"
 ---
 
 # Systematic Neuron360 Data Extraction
@@ -44,61 +44,66 @@ The hierarchy is as follows:
     -   Option 1: `is one of ["Profile Has Phone", "Profile Has Address", "Profile Has Email"]`
     -   Option 2: `is not one of ["Profile Has Phone", "Profile Has Address", "Profile Has Email"]`
 
-## 3. Concurrent Execution & Command-Line Arguments
+This hierarchical logic is implemented in the `ParameterProvider` class (`src/utils/parameter_provider.py`), which recursively generates all possible search parameter combinations. It interacts with the `ProgressTracker` to skip combinations that have already been successfully processed in previous runs.
 
-The script is designed to significantly improve performance by executing the data download process concurrently. It uses a producer-consumer model:
--   A **single main thread** (the "producer") explores the parameter hierarchy to find "workable" queries.
--   A **pool of worker threads** (the "consumers") executes the `mass_request_pages` function for each workable query, downloading the data in parallel.
+## 3. Concurrent Execution & Architecture
+
+The script uses a multi-threaded, queue-based architecture to maximize performance by decoupling network I/O from disk I/O. It consists of four main components:
+
+-   **Producer (Main Thread)**: A single main thread is responsible for exploring the parameter hierarchy via the recursive `process_layer` function. When it discovers a "workable" query, it does not perform the download itself. Instead, it places the parameter set and its total profile count onto the `work_queue`.
+-   **Downloader Workers (Thread Pool)**: A pool of worker threads (number configurable via `--threads`) are the consumers of the `work_queue`. Each worker pulls a parameter set, executes the `mass_request_pages` function to download all pages, and places the results and progress updates onto two separate queues.
+-   **File Writer (Dedicated Thread)**: A single, dedicated thread consumes from the `results_queue`. Its only job is to write the JSON response data to disk. This isolates all file-writing I/O, preventing it from blocking the high-volume downloader threads.
+-   **Progress Logger (Dedicated Thread)**: A single, dedicated thread consumes from the `progress_queue`. Its only job is to log events to the `ProgressTracker`, ensuring that updates to the ledger file are handled efficiently and in a thread-safe manner without slowing down the downloaders.
 
 This behavior can be configured with the following command-line arguments:
 
--   `--threads`: (Optional) Specifies the number of concurrent worker threads to use for downloading data. The default value is `5`. Increasing this number can improve download speed, but may be limited by network bandwidth and API rate limits.
--   `--dry-run`: (Optional) If this flag is present, the script will perform the entire parameter exploration process but will not execute the mass request downloads. This is useful for validating the query logic without making a large number of API calls.
+-   `--threads`: (Optional) Specifies the number of concurrent downloader worker threads. The default value is `5`. Increasing this number can significantly improve download speed.
+-   `--dry-run`: (Optional) If this flag is present, the script will perform the entire parameter exploration process but will not place any items on the work queue. This is useful for validating the query logic without making any API calls.
 
 ## 4. Execution Flow
 
-The script will operate using a recursive or deeply nested loop structure that follows the parameter hierarchy.
+The script operates using a recursive producer and multiple concurrent consumers.
 
-1.  **Initialize Query**: The script starts with the static `country` parameter and the first value from the highest-level moving parameter (Layer A: `last_modified_date`).
-
-2.  **Check Total Results**: A single API request is made with the current set of parameters (`page_size: 1`, `page_number: 1`) to fetch the `counts.profiles_total_results`.
-
-3.  **Decision Point**:
-    -   **If `profiles_total_results` < 10,000**:
-        -   The query is considered "workable."
-        -   The script enters **Mass Request Mode**.
-        -   It calculates the total number of pages and iterates from page 1 to the last page, sending a request for each.
-        -   Each successful response is saved as a separate JSON file.
-        -   The progress for this parameter combination is logged to the tracking CSV (see Section 5).
-        -   The script then moves to the *next* parameter value in the *current* layer (e.g., the next date range).
+1.  **Initialize**: The script starts all worker threads (downloaders, writer, logger), which are idle, waiting for items on their respective queues.
+2.  **Produce Work**: The main thread begins the recursive `process_layer` exploration. It starts with the static `country` parameter and descends through the hierarchy.
+3.  **Check Total Results**: A single API request is made with the current set of parameters (`page_size: 1`) to fetch the `counts.profiles_total_results`.
+4.  **Decision Point**:
+    -   **If `profiles_total_results` < 10,000 (and > 0)**:
+        -   The query is "workable."
+        -   The `(parameters, total_profiles)` are placed on the `work_queue`.
+        -   The script then moves to the *next* parameter value in the *current* layer.
     -   **If `profiles_total_results` >= 10,000**:
-        -   The query is too broad.
-        -   The script descends to the next layer in the hierarchy (e.g., from Layer A to Layer B).
-        -   It adds the *first* parameter value from this new, deeper layer to the query.
-        -   It repeats the **Check Total Results** step with the newly refined query.
+        -   The query is too broad. The script descends to the next layer in the hierarchy and repeats the **Check Total Results** step with the newly refined query.
+    -   **If `profiles_total_results` == 0**:
+        -   The query is empty. This branch is pruned, and the script moves to the next parameter value in the current layer.
+5.  **Consume Work**: As soon as a work item appears on the `work_queue`, an idle downloader thread picks it up and begins fetching all pages for that query.
+6.  **Process and Distribute**: For each page downloaded, the downloader thread places the JSON response on the `results_queue` and a page completion message on the `progress_queue`.
+7.  **Write and Log**: The file writer and progress logger threads work concurrently in the background, saving files and updating the ledger.
+8.  **Completion**: The main thread finishes exploring the hierarchy and waits for all queues to be empty. It then signals the worker threads to exit, and the script finishes.
 
-4.  **Bottom of Hierarchy**: If the script reaches the final layer (Layer H) and the total results are still >= 10,000, it will proceed with the **Mass Request Mode** for that query, accepting that it will only be able to retrieve the first 10,000 of the available profiles.
+## 5. Progress Tracking
 
-## 5. Rate Limiting
+A robust, append-only **Ledger CSV** (`goldilocks-data/data/systematic_request_ledgers/`) is the source of truth for tracking progress. This allows the script to be stopped and resumed without losing its place.
 
-To avoid overwhelming the Neuron360 API, a rate limit will be strictly enforced. The script will ensure that no more than 1,000 requests are sent per minute. This will be achieved by introducing a small delay (e.g., 70ms) after each API call.
+The ledger stores events (`CHECK`, `PAGE_UPDATE`, `COMPLETED`, `FAILED`) and reconstructs the full state of the system on startup, ensuring that already-completed work is skipped.
 
-## 6. Progress Tracking
+## 6. Skills Enum Enhancement
 
-A CSV file (`data/request_tracker.csv`) will be used to log the state of the extraction process. This allows for monitoring and enables the script to be stopped and resumed without losing progress.
-
-The CSV will have the following columns:
-
--   `timestamp`: When the query was executed.
--   `parameters_json`: A JSON string representing the exact `parameters` payload used for the query.
--   `total_profiles`: The value of `profiles_total_results` for the query.
--   `status`: The outcome of the query (e.g., `COMPLETED`, `IN_PROGRESS`, `SKIPPED_TOO_LARGE`).
--   `last_completed_page`: The last page number successfully downloaded. For completed queries, this will equal the total number of pages.
--   `error_message`: Any error message encountered during processing.
-
-## 7. Skills Enum Enhancement
-
-The `src/enums/neuron360/skills.py` file will be updated to include the complete and correct taxonomy of skills as defined by the Neuron360 documentation. This includes:
+The `src/enums/neuron360/skills.py` file has been updated to include the complete and correct taxonomy of skills as defined by the Neuron360 documentation. This includes:
 -   A comprehensive `SkillCategory` enum.
 -   A comprehensive `SkillSubCategory` enum.
--   A dictionary mapping each `SkillCategory` to a list of its corresponding `SkillSubCategory` members, which is crucial for the hierarchical iteration (Layer E -> Layer F).
+-   A `SKILL_HIERARCHY` dictionary that maps each `SkillCategory` to a list of its corresponding `SkillSubCategory` members, which is crucial for the hierarchical iteration (Layer E -> Layer F).
+
+## 7. Error Handling and Logging
+
+To ensure the extraction process is robust and resilient, several error handling mechanisms have been implemented:
+
+-   **API Retries**: The core `Neuron360Service` includes a retry mechanism with exponential backoff. It automatically re-attempts requests that fail with a 5xx server error.
+-   **Failed Request Logging**: Any API request that ultimately fails (after all retries) is logged to a dedicated file: `logs/failed_requests.log`. This log contains the full request parameters and the error response, allowing for manual inspection and re-processing at a later time.
+
+## 8. Testing
+
+The script includes features to facilitate testing and validation:
+
+-   **Dry Run Mode**: The `--dry-run` command-line argument allows the script to execute its entire parameter generation and decision-making logic without making any actual data-downloading API calls.
+-   **Unit Tests**: The project includes unit tests for key components. Mocks are used to isolate services and validate their behavior independently.

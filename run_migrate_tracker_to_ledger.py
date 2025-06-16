@@ -2,16 +2,13 @@ import csv
 import os
 import json
 from datetime import datetime
+from src.config.path_config import DATA_DIR, LEDGER_DIR
 
-# --- Configuration ---
-# Path to the old tracker file to read from
-OLD_TRACKER_PATH = "goldilocks-data/data/systematic_request_tracker.csv"
-# Path to the new ledger file to write to.
-# A timestamp will be appended to this to create the first ledger file.
-LEDGER_BASE_PATH = (
-    "goldilocks-data/data/systematic_request_ledgers/systematic_request_ledger"
-)
-# --- End Configuration ---
+# Define the paths using the centralized configuration
+OLD_TRACKER_PATH = os.path.join(DATA_DIR, "systematic_request_tracker.csv")
+LEDGER_BASE_PATH = os.path.join(LEDGER_DIR, "systematic_request_ledger")
+
+FIELDNAMES = ["timestamp", "parameters_key", "event_type", "data_json"]
 
 
 def migrate_data():
@@ -28,7 +25,6 @@ def migrate_data():
     # Create the first ledger file with a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     new_ledger_path = f"{LEDGER_BASE_PATH}_{timestamp}.csv"
-    ledger_fieldnames = ["timestamp", "parameters_key", "event_type", "data_json"]
 
     events_to_write = []
 
@@ -100,7 +96,7 @@ def migrate_data():
     print(f"Writing {len(events_to_write)} events to {new_ledger_path}...")
     os.makedirs(os.path.dirname(new_ledger_path), exist_ok=True)
     with open(new_ledger_path, "w", newline="") as f_new:
-        writer = csv.DictWriter(f_new, fieldnames=ledger_fieldnames)
+        writer = csv.DictWriter(f_new, fieldnames=FIELDNAMES)
         writer.writeheader()
         writer.writerows(events_to_write)
 

@@ -7,6 +7,8 @@ import threading
 from datetime import datetime
 from typing import Dict, Optional, Any
 
+from src.config.path_config import LEDGER_DIR
+
 # Define constants for event types
 EVENT_CHECK = "CHECK"
 EVENT_PAGE_UPDATE = "PAGE_UPDATE"
@@ -18,39 +20,26 @@ MAX_LEDGER_ROWS = 100000
 class ProgressTracker:
     """
     Manages and tracks the state of the systematic data extraction process.
-    It uses a robust, append-only ledger for the source of truth and maintains
-    a legacy tracker CSV for a simple, current-state view.
+    It uses a robust, append-only ledger for the source of truth.
     The class is thread-safe.
     """
 
     def __init__(
         self,
-        ledger_base_path: str = "goldilocks-data/data/systematic_request_ledgers/systematic_request_ledger",
-        tracker_path: str = "goldilocks-data/data/systematic_request_tracker.csv",
+        ledger_base_path: str = os.path.join(LEDGER_DIR, "systematic_request_ledger"),
     ):
         self.ledger_base_path = ledger_base_path
-        self.tracker_path = tracker_path
-        self.current_ledger_path = self._get_or_create_latest_ledger()
-        self.ledger_row_count = 0
-
-        self.tracker_fieldnames = [
-            "timestamp",
-            "parameters_json",
-            "total_profiles",
-            "is_workable",
-            "status",
-            "last_completed_page",
-        ]
         self.ledger_fieldnames = [
             "timestamp",
             "parameters_key",
             "event_type",
             "data_json",
         ]
+        self.current_ledger_path = self._get_or_create_latest_ledger()
+        self.ledger_row_count = 0
 
         self.progress_data: Dict[str, Dict] = {}
         self.lock = threading.Lock()
-        self._initialize_tracker_file()
 
     def _get_or_create_latest_ledger(self) -> str:
         """Finds the latest ledger file or creates a new one."""
@@ -78,36 +67,9 @@ class ProgressTracker:
         self.ledger_row_count = 0
         return new_ledger_path
 
-    def _initialize_tracker_file(self):
-        """Creates the legacy tracker CSV with a header if it doesn't exist."""
-        if not os.path.exists(self.tracker_path):
-            with open(self.tracker_path, "w", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=self.tracker_fieldnames)
-                writer.writeheader()
-
     def _get_params_key(self, params: Dict) -> str:
         """Creates a consistent, sorted JSON string to use as a key."""
         return json.dumps(params, sort_keys=True)
-
-    def _rewrite_tracker_file(self):
-        """Rewrites the legacy tracker file with the current in-memory state."""
-        rows = []
-        for key, data in self.progress_data.items():
-            rows.append(
-                {
-                    "timestamp": data.get("timestamp", datetime.now().isoformat()),
-                    "parameters_json": key,
-                    "total_profiles": data.get("total_profiles", 0),
-                    "is_workable": data.get("is_workable", False),
-                    "status": data.get("status", "UNKNOWN"),
-                    "last_completed_page": data.get("last_completed_page", 0),
-                }
-            )
-
-        with open(self.tracker_path, "w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=self.tracker_fieldnames)
-            writer.writeheader()
-            writer.writerows(rows)
 
     def _append_event(
         self, key: str, event_type: str, data: Dict[str, Any], event_time: str
@@ -156,22 +118,28 @@ class ProgressTracker:
         self.progress_data[key]["timestamp"] = timestamp
 
         if event_type == EVENT_CHECK:
+            # A CHECK event re-validates a query. Update its workable status
+            # and total_profiles, but preserve its page-level progress.
             is_workable = data["is_workable"]
             total_profiles = data.get("total_profiles", 0)
-            status = "SKIPPED_TOO_LARGE"
-            if is_workable:
-                status = "PENDING"
-            elif total_profiles == 0:
-                status = "SKIPPED_NO_RESULT"
+            current_status = self.progress_data[key].get("status")
 
-            self.progress_data[key].update(
-                {
-                    "total_profiles": total_profiles,
-                    "is_workable": is_workable,
-                    "status": status,
-                    "last_completed_page": 0,
-                }
-            )
+            self.progress_data[key]["total_profiles"] = total_profiles
+            self.progress_data[key]["is_workable"] = is_workable
+
+            # Only reset the status if it's not in a protected state (i.e., already
+            # running or finished). This allows retrying FAILED queries.
+            if current_status not in ["COMPLETED", "IN_PROGRESS"]:
+                new_status = "SKIPPED_TOO_LARGE"
+                if is_workable:
+                    new_status = "PENDING"
+                elif total_profiles == 0:
+                    new_status = "SKIPPED_NO_RESULT"
+                self.progress_data[key]["status"] = new_status
+
+            # IMPORTANT: Ensure last_completed_page is initialized only if it's not already set.
+            if "last_completed_page" not in self.progress_data[key]:
+                self.progress_data[key]["last_completed_page"] = 0
         elif event_type == EVENT_PAGE_UPDATE:
             self.progress_data[key]["last_completed_page"] = data["page_number"]
             self.progress_data[key]["status"] = "IN_PROGRESS"
@@ -179,26 +147,14 @@ class ProgressTracker:
             self.progress_data[key]["status"] = "COMPLETED"
         elif event_type == EVENT_FAILED:
             self.progress_data[key]["status"] = "FAILED"
+            if "failed_at_page" in data:
+                self.progress_data[key]["failed_at_page"] = data["failed_at_page"]
 
     def _log_event(self, params: Dict, event_type: str, data: Dict):
         """Central method to log an event, update state, and rewrite files."""
         with self.lock:
             key = self._get_params_key(params)
             event_time = datetime.now().isoformat()
-
-            # This is a bit of a hack to get the row into memory before processing
-            # In a real scenario you would have a more complex state machine
-            if key not in self.progress_data:
-                self.progress_data[key] = {}
-
-            # Special status handling for CHECK events
-            if event_type == EVENT_CHECK:
-                is_workable = data.get("is_workable", False)
-                total_profiles = data.get("total_profiles", 0)
-                if not is_workable and total_profiles == 0:
-                    # Overwrite the status in the in-memory data before logging
-                    if key in self.progress_data:
-                        self.progress_data[key]["status"] = "SKIPPED_NO_RESULT"
 
             # Process the event to update the in-memory state
             self._process_event_row(
@@ -211,8 +167,6 @@ class ProgressTracker:
             )
             # Append event to the ledger
             self._append_event(key, event_type, data, event_time)
-            # Rewrite the simple tracker CSV
-            self._rewrite_tracker_file()
 
     def log_check(self, params: Dict, total_profiles: int, is_workable: bool):
         """Logs the result of an initial query check."""
@@ -228,9 +182,11 @@ class ProgressTracker:
         """Logs that a parameter set has been fully completed."""
         self._log_event(params, EVENT_COMPLETED, {})
 
-    def mark_failed(self, params: Dict):
-        """Logs that a parameter set has failed."""
-        self._log_event(params, EVENT_FAILED, {})
+    def mark_failed(self, params: Dict, data: Dict = None):
+        """Logs that a parameter set has failed, with optional data."""
+        if data is None:
+            data = {}
+        self._log_event(params, EVENT_FAILED, data)
 
     def get_progress(self, params: Dict) -> Optional[Dict]:
         """Gets the reconstructed progress from the in-memory state."""
